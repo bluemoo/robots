@@ -103,14 +103,6 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		return rotation;
 	}
 
-	public IGearbox getLastPlannedState() {
-		IGearbox result = new FakeGearbox().Copy(_gearbox);
-		for(IGearbox gearbox : predict_future_position()) {
-			result = gearbox;
-		}
-		return result;
-	}
-
 	public double getCurrentDirection() {
 		return _currentDirection;
 	}

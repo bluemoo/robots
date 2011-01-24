@@ -29,6 +29,14 @@ public class PlannedMovementController extends MovementControllerBase {
 		System.out.println("new plan for time: " + plan.getTime() + " - " + _lastPlannedTime);
 	}
 	
+	public IGearbox getLastPlannedState() {
+		IGearbox result = new FakeGearbox().Copy(_gearbox);
+		for(IGearbox gearbox : predict_future_position()) {
+			result = gearbox;
+		}
+		return result;
+	}
+	
 	@Override
 	protected boolean hasPlan(long time) {
 		return time <= _lastPlannedTime;
