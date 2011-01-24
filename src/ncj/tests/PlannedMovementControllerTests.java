@@ -95,7 +95,25 @@ public class PlannedMovementControllerTests {
 	}
 	
 	@Test public void ShouldIgnoreNullPlans() {
-		PlannedMovementController _controller = new PlannedMovementController(new FakeGearbox());
 		_controller.setMovement(null);
+	}
+	
+	@Test public void ShouldNotBeAbleToModifyPlansListFromCopiedController()
+	{
+		_controller.setMovement( new MovementPlan().setTime(1).setAhead(1).setTurn(Math.PI));
+		PlannedMovementController copied = new PlannedMovementController(_gearbox);
+		copied.Copy(_controller);
+		copied.setMovement(new MovementPlan().setTime(2));
+		
+		assertEquals(1, _controller.getPlans().size());
+	}
+	
+	@Test public void ShouldHaveCorrectLastPlannedTimeInCopiedController()
+	{
+		_controller.setMovement( new MovementPlan().setTime(1).setNumberOfTicks(2));
+		PlannedMovementController copied = new PlannedMovementController(_gearbox);
+		copied.Copy(_controller);
+		
+		assertEquals(_controller.getLastPlannedTime(), copied.getLastPlannedTime());
 	}
 }

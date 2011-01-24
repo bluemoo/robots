@@ -45,4 +45,13 @@ public class PlannedMovementController extends MovementControllerBase {
 	public Hashtable<Long, MovementPlan> getPlans() {
 		return _plans;
 	}
+
+	public long getLastPlannedTime() {
+		return _lastPlannedTime;
+	}
+	
+	public void Copy(PlannedMovementController controller) {
+		_plans = (Hashtable<Long, MovementPlan>) controller._plans.clone();
+		_lastPlannedTime = controller._lastPlannedTime;
+	}
 }
