@@ -81,11 +81,7 @@ public class PerpendicularMovementTests {
 		
 		assertEquals(null, plan);
 	}
-	
-	@Test public void ShouldIgnoreNullPlans() {
-		_controller.setMovement(null);
-	}
-	
+
 	@Test public void ShouldReturnLastPlannedLocationForHitAt() {
 		TargetingComputer targeting = new TargetingComputer(_controller);
 		IGearbox gearbox = targeting.hits_at(new Wave(3, new EnemyState().setPosition(300, 100)));
