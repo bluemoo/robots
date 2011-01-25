@@ -50,6 +50,7 @@ public class PlannedMovementController extends MovementControllerBase {
 		return _lastPlannedTime;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void Copy(PlannedMovementController controller) {
 		_plans = (Hashtable<Long, MovementPlan>) controller._plans.clone();
 		_lastPlannedTime = controller._lastPlannedTime;

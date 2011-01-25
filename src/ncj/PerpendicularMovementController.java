@@ -29,24 +29,24 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		
 		IGearbox lastPlanned = getLastPlannedState();
 		double rotation = calculateRotation(wave, lastPlanned);			
-		
-		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
-		boolean ranIntoWall = simulation.run_until_wave_hits(wave);
+	
+		boolean ranIntoWall = false;
+		SimulatedGearbox simulation = run_until_wave_hits_or_wall(wave, rotation);	
+		ranIntoWall = simulation.getHitWall();
 		
 		if(ranIntoWall) {
 			double smoothedRotation = smoothed_rotation(simulation, lastPlanned.getHeadingRadians());
-
-			simulation = prepare_simulation(lastPlanned, smoothedRotation);
-			ranIntoWall = simulation.run_until_wave_hits(wave);
 			
+			simulation = run_until_wave_hits_or_wall(wave, smoothedRotation);	
+			ranIntoWall = simulation.getHitWall();
+				
 			if(ranIntoWall == false)
 				rotation = smoothedRotation;
 		}
 		
 		if(ranIntoWall) {
 			_currentDirection *= -1;	
-			simulation = prepare_simulation(lastPlanned, rotation);
-			simulation.run_until_wave_hits(wave);
+			simulation = run_until_wave_hits_or_wall(wave, rotation);
 		}
 		
 		long elapsedTime = simulation.getTime() - lastPlanned.getTime();
@@ -54,6 +54,31 @@ public class PerpendicularMovementController extends PlannedMovementController {
 			return new MovementPlan().setAhead(_currentDirection).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
 		
 		return null;
+	}
+
+	private SimulatedGearbox run_until_wave_hits_or_wall(Wave wave, double rotation) {
+		IGearbox lastPlanned = getLastPlannedState();
+		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
+		MovementPlan planToTest = new MovementPlan().setAhead(_currentDirection).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
+		
+		PlannedMovementController copiedPlans = new PlannedMovementController(_gearbox);
+		copiedPlans.Copy(this);
+		copiedPlans.setMovement(planToTest);
+
+		boolean hitWall = false;
+		if(!wave.hasHit(simulation))
+		{
+			for( IGearbox gearbox : copiedPlans.predict_future_position())
+			{
+				simulation = (SimulatedGearbox)gearbox;
+				if(simulation.getHitWall())
+					hitWall = true;
+				if( wave.hasHit(simulation))
+					break;
+			}
+		}
+		simulation.setHitWall(hitWall);
+		return simulation;
 	}
 
 	public double smoothed_rotation(IGearbox gearbox, double heading) {
