@@ -6,8 +6,8 @@ import java.util.Iterator;
 
 import ncj.FakeGearbox;
 import ncj.IGearbox;
-import ncj.MovementPlan;
-import ncj.PlannedMovementController;
+import ncj.Movement.MovementPlan;
+import ncj.Movement.PlannedMovementController;
 
 import org.junit.Before;
 import org.junit.Test;

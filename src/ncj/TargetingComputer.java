@@ -1,5 +1,7 @@
 package ncj;
 
+import ncj.Movement.MovementControllerBase;
+
 public class TargetingComputer {
 
 	private MovementControllerBase _movementController;

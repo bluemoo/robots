@@ -3,8 +3,8 @@ package ncj.tests;
 import static org.junit.Assert.*;
 
 import ncj.FakeGearbox;
-import ncj.MovementControllerBase;
-import ncj.UpAndDownMovementController;
+import ncj.Movement.MovementControllerBase;
+import ncj.Movement.UpAndDownMovementController;
 
 import org.junit.Before;
 import org.junit.Test;

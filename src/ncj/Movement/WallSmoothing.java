@@ -1,5 +1,6 @@
-package ncj;
+package ncj.Movement;
 
+import ncj.IGearbox;
 import robocode.util.Utils;
 
 public class WallSmoothing implements IWallSmoothing {

@@ -3,8 +3,8 @@ package ncj.tests;
 import static org.junit.Assert.*;
 import ncj.EnemyAnalysis;
 import ncj.FakeGearbox;
-import ncj.FakeWallSmoothing;
-import ncj.PerpendicularMovementController;
+import ncj.Movement.FakeWallSmoothing;
+import ncj.Movement.PerpendicularMovementController;
 
 import org.junit.Test;
 

@@ -1,6 +1,9 @@
-package ncj;
+package ncj.Movement;
 
 import java.util.Hashtable;
+
+import ncj.FakeGearbox;
+import ncj.IGearbox;
 
 public class PlannedMovementController extends MovementControllerBase {
 	private Hashtable<Long, MovementPlan> _plans = new Hashtable<Long, MovementPlan>(); 

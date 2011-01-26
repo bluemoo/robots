@@ -5,10 +5,10 @@ import ncj.EnemyAnalysis;
 import ncj.EnemyState;
 import ncj.FakeGearbox;
 import ncj.IGearbox;
-import ncj.MovementPlan;
-import ncj.PerpendicularMovementController;
 import ncj.TargetingComputer;
 import ncj.Wave;
+import ncj.Movement.MovementPlan;
+import ncj.Movement.PerpendicularMovementController;
 
 import org.junit.Before;
 import org.junit.Test;

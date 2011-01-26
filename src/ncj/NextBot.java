@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Date;
 
+import ncj.Movement.MovementControllerBase;
+import ncj.Movement.PerpendicularMovementController;
+import ncj.Movement.WallSmoothing;
+
 import robocode.AdvancedRobot;
 import robocode.BattleEndedEvent;
 import robocode.BulletHitBulletEvent;

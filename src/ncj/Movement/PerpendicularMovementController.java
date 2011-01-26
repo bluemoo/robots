@@ -1,5 +1,10 @@
-package ncj;
+package ncj.Movement;
 
+import ncj.EnemyAnalysis;
+import ncj.IGearbox;
+import ncj.SimulatedGearbox;
+import ncj.Vector2D;
+import ncj.Wave;
 import robocode.util.Utils;
 
 public class PerpendicularMovementController extends PlannedMovementController {

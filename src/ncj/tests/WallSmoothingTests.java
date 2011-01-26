@@ -2,7 +2,7 @@ package ncj.tests;
 
 import static org.junit.Assert.*;
 import ncj.FakeGearbox;
-import ncj.WallSmoothing;
+import ncj.Movement.WallSmoothing;
 
 import org.junit.Before;
 import org.junit.Test;

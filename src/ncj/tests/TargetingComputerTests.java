@@ -6,11 +6,11 @@ import ncj.EnemyState;
 import ncj.FakeGearbox;
 import ncj.FiringSolution;
 import ncj.IGearbox;
-import ncj.MovementControllerBase;
-import ncj.UpAndDownMovementController;
 import ncj.TargetingComputer;
 import ncj.Vector2D;
 import ncj.Wave;
+import ncj.Movement.MovementControllerBase;
+import ncj.Movement.UpAndDownMovementController;
 
 import org.junit.Before;
 import org.junit.Test;

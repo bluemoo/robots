@@ -1,4 +1,6 @@
-package ncj;
+package ncj.Movement;
+
+import ncj.IGearbox;
 
 public class FakeWallSmoothing implements IWallSmoothing {
 

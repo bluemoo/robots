@@ -1,4 +1,8 @@
-package ncj;
+package ncj.Movement;
+
+import ncj.FakeGearbox;
+import ncj.IGearbox;
+import ncj.SimulatedGearbox;
 
 public abstract class MovementControllerBase {
 
