@@ -17,14 +17,4 @@ public class SimulatedGearbox extends FakeGearbox {
 	public void setHitWall(boolean hit) {
 		_hit = hit;
 	}
-	
-	public boolean run_until_wave_hits(Wave wave) {
-		boolean ranIntoWall = false;
-		while( !wave.hasHit(this) ) {
-			next();
-			if(getHitWall())
-				ranIntoWall = true;
-		}
-		return ranIntoWall;
-	}
 }

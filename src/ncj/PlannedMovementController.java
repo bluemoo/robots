@@ -5,10 +5,16 @@ import java.util.Hashtable;
 public class PlannedMovementController extends MovementControllerBase {
 	private Hashtable<Long, MovementPlan> _plans = new Hashtable<Long, MovementPlan>(); 
 	private long _lastPlannedTime = -1;
+	private IWallSmoothing _wallSmoothing;
 	
 	public PlannedMovementController(IGearbox gearbox) {
+		this(gearbox, null);
+	}
+
+	public PlannedMovementController(IGearbox gearbox,
+			IWallSmoothing wallSmoothing) {
 		super(gearbox);
-		// TODO Auto-generated constructor stub
+		_wallSmoothing = wallSmoothing;
 	}
 
 	@Override
@@ -18,6 +24,11 @@ public class PlannedMovementController extends MovementControllerBase {
 		if(plan != null) {
 			gearbox.setAhead(plan.getAhead());
 			gearbox.setTurnRightRadians(plan.getTurn());
+		}
+		
+		if(_wallSmoothing != null)
+		{
+			_wallSmoothing.smooth(gearbox);
 		}
 	}
 
@@ -54,5 +65,6 @@ public class PlannedMovementController extends MovementControllerBase {
 	public void Copy(PlannedMovementController controller) {
 		_plans = (Hashtable<Long, MovementPlan>) controller._plans.clone();
 		_lastPlannedTime = controller._lastPlannedTime;
+		_wallSmoothing = controller._wallSmoothing;
 	}
 }

@@ -32,8 +32,8 @@ public class NextBot extends AdvancedRobot {
 
 		_gearbox = new Gearbox(this);
 		_enemy = new EnemyAnalysis(_log);
-		//_movementController = new UpAndDownMovementController(_gearbox);
-		_movementController = new PerpendicularMovementController(_gearbox, _enemy);
+		
+		_movementController = new PerpendicularMovementController(_gearbox, _enemy, new WallSmoothing());
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
 		while(true)

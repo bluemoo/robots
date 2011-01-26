@@ -163,6 +163,5 @@ public class PerpendicularMovementTests {
 		
 		smoothed = _controller.smoothed_rotation(new FakeGearbox().setPosition(18, 100), -Math.PI/4.0);
 		assertEquals(Math.PI/4, smoothed, .00001);
-		
 	}
 }

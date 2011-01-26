@@ -8,7 +8,12 @@ public class PerpendicularMovementController extends PlannedMovementController {
 	private double _currentDirection = Double.POSITIVE_INFINITY;
 	
 	public PerpendicularMovementController(IGearbox gearbox, EnemyAnalysis enemyAnalysis) {
-		super(gearbox);
+		this(gearbox, enemyAnalysis, null);
+	}
+
+	public PerpendicularMovementController(IGearbox gearbox,
+			EnemyAnalysis enemyAnalysis, IWallSmoothing wallSmoothing) {
+		super(gearbox, wallSmoothing);
 		_enemy = enemyAnalysis;
 	}
 
@@ -51,7 +56,7 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		
 		long elapsedTime = simulation.getTime() - lastPlanned.getTime();
 		if( elapsedTime > 0)
-			return new MovementPlan().setAhead(_currentDirection).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
+			return new MovementPlan().setAhead(getCurrentDirection()).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
 		
 		return null;
 	}
@@ -59,7 +64,7 @@ public class PerpendicularMovementController extends PlannedMovementController {
 	private SimulatedGearbox run_until_wave_hits_or_wall(Wave wave, double rotation) {
 		IGearbox lastPlanned = getLastPlannedState();
 		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
-		MovementPlan planToTest = new MovementPlan().setAhead(_currentDirection).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
+		MovementPlan planToTest = new MovementPlan().setAhead(getCurrentDirection()).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
 		
 		PlannedMovementController copiedPlans = new PlannedMovementController(_gearbox);
 		copiedPlans.Copy(this);
@@ -83,7 +88,7 @@ public class PerpendicularMovementController extends PlannedMovementController {
 
 	public double smoothed_rotation(IGearbox gearbox, double heading) {
 		double effectiveHeading = heading;
-		if(_currentDirection < 0)
+		if(getCurrentDirection() < 0)
 			effectiveHeading = Utils.normalRelativeAngle(heading + Math.PI);
 		
 		if(gearbox.getY() > 580 || gearbox.getY() < 20)
@@ -110,7 +115,7 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		SimulatedGearbox simulation;
 		simulation = new SimulatedGearbox();
 		simulation.Copy(lastPlanned);
-		simulation.setAhead(_currentDirection);
+		simulation.setAhead(getCurrentDirection());
 		simulation.setTurnRightRadians(rotation);
 		return simulation;
 	}
