@@ -1,20 +1,31 @@
-Use precise intersection to get a better idea of where to block.
+Smooth for the walls when near, instead of only when a plan would hit one.
+   - Does the smoother prevent the robot from moving at an angle at an edge but toward center?
+   - Don't get caught in corners
+   - Don't reverse direction near edge when it's bad to do so.
+
+Log entire solutions, and whether they succeeded or not, and analyze.
+    - Should bot try to move closer, or further?
+    - What is the success profile?
+	- Do different bots have different profiles?
+	
+Add random movement.
+   - Purely random?
+   - Random, taking into account probability of being able to block bullet given solution
+		- Select between moving as far as possible in each direction
+		- Choose from a continuous set of possible locations, given the probability of intersection at each
 
 Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
 
-Smooth for the walls when near, instead of only when a plan would hit one.
-   - Don't get caught in corners
-   - Don't reverse direction near edge when it's bad to do so.
+Use precise intersection to get a better idea of where to block.
 
 Adjust the intersection time of bullets by slightly adjusting where the bot moves to, rather than adjusting the power of my bullet. Phrased another way: calculate the intersection, then just don't move quite as far, in order to be fully covered.
 
 Determine whether to use an adjustment based on the potential payoff; in other words, never, ever, fire a bullet with more power than the one you're trying to intercept. Don't even fire if the chance of them missing is high enough, and their bullet power low enough?
+
+Sometimes shoot at the enemy if that has a better expected payoff than dodging.
 
 Move towards enemy, covering with bullet shield, and ram them. Will moving at an angle towards the enemy actually improve the intercept rate?
 
 Don't wait to fire at enemy bullets when they are fired, instead, fire at the bots maximum rate and just fire at the closest 'unblocked' wave. This may be simplified by firing at the furthest wave. Make sure that when you fire, not to bother intercepting any portion of the wave that was already cleared.
 
 Learn where the enemy aims.
-
-Log entire solutions, and whether they succeeded or not, and analyze.
-    - Should bot try to move closer, or further?

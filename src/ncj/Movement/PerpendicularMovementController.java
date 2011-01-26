@@ -5,7 +5,6 @@ import ncj.IGearbox;
 import ncj.SimulatedGearbox;
 import ncj.Vector2D;
 import ncj.Wave;
-import robocode.util.Utils;
 
 public class PerpendicularMovementController extends PlannedMovementController {
 
@@ -41,22 +40,12 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		double rotation = calculateRotation(wave, lastPlanned);			
 	
 		boolean ranIntoWall = false;
-		SimulatedGearbox simulation = run_until_wave_hits_or_wall(wave, rotation);	
+		SimulatedGearbox simulation = run_until_wave_hits(wave, rotation);	
 		ranIntoWall = simulation.getHitWall();
 		
 		if(ranIntoWall) {
-			double smoothedRotation = smoothed_rotation(simulation, lastPlanned.getHeadingRadians());
-			
-			simulation = run_until_wave_hits_or_wall(wave, smoothedRotation);	
-			ranIntoWall = simulation.getHitWall();
-				
-			if(ranIntoWall == false)
-				rotation = smoothedRotation;
-		}
-		
-		if(ranIntoWall) {
 			_currentDirection *= -1;	
-			simulation = run_until_wave_hits_or_wall(wave, rotation);
+			simulation = run_until_wave_hits(wave, rotation);
 		}
 		
 		long elapsedTime = simulation.getTime() - lastPlanned.getTime();
@@ -66,7 +55,7 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		return null;
 	}
 
-	private SimulatedGearbox run_until_wave_hits_or_wall(Wave wave, double rotation) {
+	private SimulatedGearbox run_until_wave_hits(Wave wave, double rotation) {
 		IGearbox lastPlanned = getLastPlannedState();
 		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
 		MovementPlan planToTest = new MovementPlan().setAhead(getCurrentDirection()).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
@@ -90,30 +79,30 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		simulation.setHitWall(hitWall);
 		return simulation;
 	}
-
-	public double smoothed_rotation(IGearbox gearbox, double heading) {
-		double effectiveHeading = heading;
-		if(getCurrentDirection() < 0)
-			effectiveHeading = Utils.normalRelativeAngle(heading + Math.PI);
-		
-		if(gearbox.getY() > 580 || gearbox.getY() < 20)
-			if(effectiveHeading > 0)
-				return robocode.util.Utils.normalRelativeAngle(Math.PI/2 - effectiveHeading);
-			else
-				return robocode.util.Utils.normalRelativeAngle(-Math.PI/2 - effectiveHeading);
-		if(gearbox.getX() > 780)
-			if(effectiveHeading > Math.PI/2)
-				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
-			else
-				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
-		if(gearbox.getX() < 20)
-			if(effectiveHeading < -Math.PI/2)
-				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
-			else
-				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
-		
-		return 0;
-	}
+//
+//	public double smoothed_rotation(IGearbox gearbox, double heading) {
+//		double effectiveHeading = heading;
+//		if(getCurrentDirection() < 0)
+//			effectiveHeading = Utils.normalRelativeAngle(heading + Math.PI);
+//		
+//		if(gearbox.getY() > 580 || gearbox.getY() < 20)
+//			if(effectiveHeading > 0)
+//				return robocode.util.Utils.normalRelativeAngle(Math.PI/2 - effectiveHeading);
+//			else
+//				return robocode.util.Utils.normalRelativeAngle(-Math.PI/2 - effectiveHeading);
+//		if(gearbox.getX() > 780)
+//			if(effectiveHeading > Math.PI/2)
+//				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
+//			else
+//				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
+//		if(gearbox.getX() < 20)
+//			if(effectiveHeading < -Math.PI/2)
+//				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
+//			else
+//				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
+//		
+//		return 0;
+//	}
 
 	private SimulatedGearbox prepare_simulation(IGearbox lastPlanned,
 			double rotation) {

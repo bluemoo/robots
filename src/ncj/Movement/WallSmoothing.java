@@ -1,15 +1,33 @@
 package ncj.Movement;
 
+import java.util.Vector;
+
 import ncj.IGearbox;
 import robocode.util.Utils;
 
 public class WallSmoothing implements IWallSmoothing {
 	
-	static double OFFSET = 180;
-	static double LEFT = OFFSET;
-	static double RIGHT = 800 - OFFSET;
-	static double BOTTOM = OFFSET;
-	static double TOP = 600 - OFFSET;
+	static double OFFSET = 160;
+	static double LEFT = 0;
+	static double RIGHT = 800;
+	static double BOTTOM = 0;
+	static double TOP = 600;
+	
+	private boolean isHeadingTowardCloseWall(double heading, double x, double y)
+	{
+		double dx = Math.sin(heading);
+		double dy = Math.cos(heading);
+	
+		double distToTop = dy == 0 ? Double.POSITIVE_INFINITY : (TOP - y) / dy;
+		double distToBottom = dy == 0 ? Double.POSITIVE_INFINITY : (BOTTOM - y) / dy;
+		double distToLeft = dx == 0 ? Double.POSITIVE_INFINITY : (LEFT - x) / dx;
+		double distToRight = dx == 0 ? Double.POSITIVE_INFINITY : (RIGHT - x) / dx;
+
+		if((distToTop < 0 || distToTop > OFFSET) && (distToBottom < 0 || distToBottom > OFFSET)
+				&& (distToLeft < 0 || distToLeft > OFFSET) && (distToRight < 0 || distToRight > OFFSET))
+			return true;
+		return false;
+	}
 	
 	public void smooth(IGearbox gearbox)
 	{
@@ -21,19 +39,37 @@ public class WallSmoothing implements IWallSmoothing {
 		if( gearbox.getDistanceRemaining() < 0)
 			heading = Utils.normalAbsoluteAngle(heading + Math.PI);
 
-		if(x <= LEFT || x >= RIGHT || y >= TOP || y <= BOTTOM)
-			if (y <= BOTTOM)
-				heading = Utils.normalAbsoluteAngle(heading + Math.PI/2.0);	
-			else if (x >= RIGHT)
-				heading = Utils.normalAbsoluteAngle(heading + Math.PI);
-			else if ( y >= TOP)
-				heading = Utils.normalAbsoluteAngle(heading + Math.PI*3.0/2);
-				
-			if(heading - Math.PI*3/2 > 0)
-				turn = Math.max(Math.PI*2 - heading, gearbox.getTurnRemainingRadians());
+		if(x <= LEFT + OFFSET || x >= RIGHT - OFFSET || y >= TOP - OFFSET || y <= BOTTOM + OFFSET)
+		{
+			//Turn towards each of the four possible directions
+			//Discard those that end up running towards a wall
+			//Select the one with the least amount of turning
+			double[] possibleTurns = {Utils.normalRelativeAngle(0 - heading),
+										Utils.normalRelativeAngle(Math.PI - heading),
+										Utils.normalRelativeAngle(Math.PI/2.0 - heading),
+										Utils.normalRelativeAngle(Math.PI*3/2.0 - heading)};
+			
+
+			Vector<Double> turnsAwayFromWalls = new Vector<Double>();
+			for( double possibleTurn : possibleTurns)
+			{
+				double headingAfterTurn = heading + possibleTurn;
+				if(isHeadingTowardCloseWall(headingAfterTurn, x, y))	
+					turnsAwayFromWalls.add(possibleTurn);
+			}
+
+			double leastTurning = Math.PI*2;
+			for( double possibleTurn : turnsAwayFromWalls)
+			{
+				if(Math.abs(possibleTurn) < Math.abs(leastTurning))
+					leastTurning = possibleTurn;
+			}
+			
+			if(leastTurning > 0)
+				turn = Math.max(leastTurning, gearbox.getTurnRemainingRadians());
 			else
-				turn = Math.min(Math.PI - heading, gearbox.getTurnRemainingRadians());
-		
+				turn = Math.min(leastTurning, gearbox.getTurnRemainingRadians());
+		}
 		gearbox.setTurnRightRadians(turn);
 	}
 	

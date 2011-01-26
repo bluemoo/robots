@@ -98,4 +98,32 @@ public class WallSmoothingTests {
 	
 		assertEquals(Math.PI/4.0, _gearbox.getTurnRemainingRadians(), .001);
 	}
+	
+	@Test public void ShouldRotateEastIfHeadingNorthIntoTheNorthWestCorner()
+	{
+		_gearbox.setPosition(130, 470).setHeading(0);
+		
+		_wallSmoothing.smooth(_gearbox);
+		
+		assertEquals(Math.PI/2.0, _gearbox.getTurnRemainingRadians(), .001);
+	}
+	
+	@Test public void ShouldRotateEastIfHeadingNorthWestIntoTheWestWallInTheNorthWestCorner()
+	{
+		_gearbox.setPosition(130, 460).setHeading(Math.PI*7.1/4.0);
+		
+		_wallSmoothing.smooth(_gearbox);
+		
+		assertEquals(Math.PI*2.9/4.0, _gearbox.getTurnRemainingRadians(), .001);
+	}
+	
+	@Test public void ShouldBeAllowedToMoveAwayFromTheWallIfDoingSoWillNotPutTheRobotIntoAWall()
+	{
+		_gearbox.setPosition(300, 130).setHeading(Math.PI/2).setTurnRightRadians(-1);
+		
+		_wallSmoothing.smooth(_gearbox);
+		
+		assertEquals(-1, _gearbox.getTurnRemainingRadians(), .001);
+	
+	}
 }
