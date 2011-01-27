@@ -27,7 +27,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateNorthIfRobotIsHeadingIntoTheWestWall()
 	{
-		_gearbox.setPosition(130, 300).setHeading(Math.PI*7.0/4.0);
+		_gearbox.setPosition(100, 300).setHeading(Math.PI*7.0/4.0);
 		
 		_wallSmoothing.smooth(_gearbox);
 	
@@ -64,7 +64,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateNorthIfRobotIsHeadingIntoTheWestWallWithANegativeDirection()
 	{
-		_gearbox.setPosition(130, 300).setHeading(Math.PI*3.0/4.0);
+		_gearbox.setPosition(100, 300).setHeading(Math.PI*3.0/4.0);
 		_gearbox.setAhead(Double.NEGATIVE_INFINITY);
 		
 		_wallSmoothing.smooth(_gearbox);
@@ -74,7 +74,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateNorthIfRobotIsHeadingIntoTheEastWallHeadingNorth()
 	{
-		_gearbox.setPosition(670, 300).setHeading(Math.PI*1.0/4.0);
+		_gearbox.setPosition(730, 300).setHeading(Math.PI*1.0/4.0);
 		
 		_wallSmoothing.smooth(_gearbox);
 	
@@ -83,7 +83,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateWestIfRobotIsHeadedNWIntoTheNorthWall()
 	{
-		_gearbox.setPosition(300, 470).setHeading(Math.PI*7.0/4.0);
+		_gearbox.setPosition(300, 500).setHeading(Math.PI*7.0/4.0);
 		
 		_wallSmoothing.smooth(_gearbox);
 	
@@ -92,7 +92,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateWestIfRobotIsHeadedSWIntoTheSouthWall()
 	{
-		_gearbox.setPosition(300, 130).setHeading(Math.PI*5.0/4.0);
+		_gearbox.setPosition(300, 100).setHeading(Math.PI*5.0/4.0);
 		
 		_wallSmoothing.smooth(_gearbox);
 	
@@ -110,7 +110,7 @@ public class WallSmoothingTests {
 	
 	@Test public void ShouldRotateEastIfHeadingNorthWestIntoTheWestWallInTheNorthWestCorner()
 	{
-		_gearbox.setPosition(130, 460).setHeading(Math.PI*7.1/4.0);
+		_gearbox.setPosition(100, 460).setHeading(Math.PI*7.1/4.0);
 		
 		_wallSmoothing.smooth(_gearbox);
 		
@@ -124,6 +124,33 @@ public class WallSmoothingTests {
 		_wallSmoothing.smooth(_gearbox);
 		
 		assertEquals(-1, _gearbox.getTurnRemainingRadians(), .001);
+	
+	}
+	
+	@Test public void ShouldIdentifyThatTheRobotIsHeadingIntoTheNorthWall()
+	{
+		assertEquals(true, _wallSmoothing.isHeadingTowardCloseWall(0, 300, 500));
+	}
+	@Test public void ShouldIdentifyThatTheRobotIsHeadingIntoTheWestWall()
+	{
+		assertEquals(true, _wallSmoothing.isHeadingTowardCloseWall(Math.PI*3/2, 100, 500));
+	}
+	@Test public void ShouldIdentifyThatTheRobotIsHeadingIntoTheEastWall()
+	{
+		assertEquals(true, _wallSmoothing.isHeadingTowardCloseWall(Math.PI/2, 700, 500));
+	}
+	@Test public void ShouldIdentifyThatTheRobotIsHeadingIntoTheSouthWall()
+	{
+		assertEquals(true, _wallSmoothing.isHeadingTowardCloseWall(Math.PI, 300, 100));
+	}
+	
+	@Test public void ShouldBeAllowedToMoveAwayFromTheNorthWallIfDoingSoWillNotPutTheRobotIntoAWall()
+	{
+		_gearbox.setPosition(300, 536).setHeading(Math.PI/2).setTurnRightRadians(.4);
+		
+		_wallSmoothing.smooth(_gearbox);
+		
+		assertEquals(.4, _gearbox.getTurnRemainingRadians(), .001);
 	
 	}
 }
