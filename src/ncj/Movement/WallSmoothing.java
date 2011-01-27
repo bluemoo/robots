@@ -21,7 +21,7 @@ public class WallSmoothing implements IWallSmoothing {
 		double distToTop = dy == 0 ? Double.POSITIVE_INFINITY : (TOP - y) / dy;
 		double distToBottom = dy == 0 ? Double.POSITIVE_INFINITY : (BOTTOM - y) / dy;
 		double distToLeft = dx == 0 ? Double.POSITIVE_INFINITY : (LEFT - x) / dx;
-		double distToRight = dx == 0 ? Double.POSITIVE_INFINITY : (RIGHT - x) / dx;;
+		double distToRight = dx == 0 ? Double.POSITIVE_INFINITY : (RIGHT - x) / dx;
 		
 		if((distToTop < 0 || distToTop > OFFSET) && (distToBottom < 0 || distToBottom > OFFSET)
 				&& (distToLeft < 0 || distToLeft > OFFSET) && (distToRight < 0 || distToRight > OFFSET))

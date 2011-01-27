@@ -90,31 +90,30 @@ public class PerpendicularMovementTests {
 	}
 	
 	@Test public void ShouldTravelBackwardsIfPlanWouldTakeRobotIntoWall() {
-		_gearbox.setPosition(200, 550).setVelocity(8);
+		_gearbox.setPosition(200, 550).setVelocity(8).setAhead(Double.POSITIVE_INFINITY);
 		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 550)));
 		
 		assertEquals(Double.NEGATIVE_INFINITY, plan.getAhead(), .001);
-		assertEquals(Double.NEGATIVE_INFINITY, _controller.getCurrentDirection(), .0001);
 	}
 	
 	@Test public void ShouldInitiallyTravelForwards() {
-		assertEquals(Double.POSITIVE_INFINITY, _controller.getCurrentDirection(), .0001);
+		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 550)));
+		
+		assertEquals(Double.POSITIVE_INFINITY, plan.getAhead(), .0001);
 	}
 	
 	@Test public void ShouldTravelForwardsIfPlanWouldTakeRobotIntoWall() {
-		_gearbox.setPosition(200, 550).setVelocity(-8).setHeading(Math.PI);
-		_controller.setCurrentDirection(Double.NEGATIVE_INFINITY);
-		_controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 550)));
+		_gearbox.setPosition(200, 550).setVelocity(-8).setHeading(Math.PI).setAhead(Double.NEGATIVE_INFINITY);
+		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 550)));
 		
-		assertEquals(Double.POSITIVE_INFINITY, _controller.getCurrentDirection(), .0001);	
+		assertEquals(Double.POSITIVE_INFINITY, plan.getAhead(), .0001);	
 	}
 	
 	@Test public void ShouldContinueInNegativeDirection() {
-		_gearbox.setPosition(200, 300);
-		_controller.setCurrentDirection(Double.NEGATIVE_INFINITY);
-		_controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 300)));
+		_gearbox.setPosition(200, 300).setAhead(Double.NEGATIVE_INFINITY);
+		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 300)));
 		
-		assertEquals(Double.NEGATIVE_INFINITY, _controller.getCurrentDirection(), .0001);	
+		assertEquals(Double.NEGATIVE_INFINITY, plan.getAhead(), .0001);	
 	}
 	
 }

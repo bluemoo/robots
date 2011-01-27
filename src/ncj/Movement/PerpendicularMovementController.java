@@ -9,7 +9,6 @@ import ncj.Wave;
 public class PerpendicularMovementController extends PlannedMovementController {
 
 	private EnemyAnalysis _enemy;
-	private double _currentDirection = Double.POSITIVE_INFINITY;
 	
 	public PerpendicularMovementController(IGearbox gearbox, EnemyAnalysis enemyAnalysis) {
 		this(gearbox, enemyAnalysis, null);
@@ -37,28 +36,31 @@ public class PerpendicularMovementController extends PlannedMovementController {
 	public MovementPlan calculatePlan(Wave wave) {
 		
 		IGearbox lastPlanned = getLastPlannedState();
+		double direction = lastPlanned.getDistanceRemaining();
+		if(direction == 0)
+			direction = Double.POSITIVE_INFINITY;
 		double rotation = calculateRotation(wave, lastPlanned);			
 	
 		boolean ranIntoWall = false;
-		SimulatedGearbox simulation = run_until_wave_hits(wave, rotation);	
+		SimulatedGearbox simulation = run_until_wave_hits(wave, rotation, direction);	
 		ranIntoWall = simulation.getHitWall();
 		
 		if(ranIntoWall) {
-			_currentDirection *= -1;	
-			simulation = run_until_wave_hits(wave, rotation);
+			direction *= -1;	
+			simulation = run_until_wave_hits(wave, rotation, direction);
 		}
 		
 		long elapsedTime = simulation.getTime() - lastPlanned.getTime();
 		if( elapsedTime > 0)
-			return new MovementPlan().setAhead(getCurrentDirection()).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
+			return new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
 		
 		return null;
 	}
 
-	private SimulatedGearbox run_until_wave_hits(Wave wave, double rotation) {
+	private SimulatedGearbox run_until_wave_hits(Wave wave, double rotation, double direction) {
 		IGearbox lastPlanned = getLastPlannedState();
 		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
-		MovementPlan planToTest = new MovementPlan().setAhead(getCurrentDirection()).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
+		MovementPlan planToTest = new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
 		
 		PlannedMovementController copiedPlans = new PlannedMovementController(_gearbox);
 		copiedPlans.Copy(this);
@@ -79,37 +81,12 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		simulation.setHitWall(hitWall);
 		return simulation;
 	}
-//
-//	public double smoothed_rotation(IGearbox gearbox, double heading) {
-//		double effectiveHeading = heading;
-//		if(getCurrentDirection() < 0)
-//			effectiveHeading = Utils.normalRelativeAngle(heading + Math.PI);
-//		
-//		if(gearbox.getY() > 580 || gearbox.getY() < 20)
-//			if(effectiveHeading > 0)
-//				return robocode.util.Utils.normalRelativeAngle(Math.PI/2 - effectiveHeading);
-//			else
-//				return robocode.util.Utils.normalRelativeAngle(-Math.PI/2 - effectiveHeading);
-//		if(gearbox.getX() > 780)
-//			if(effectiveHeading > Math.PI/2)
-//				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
-//			else
-//				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
-//		if(gearbox.getX() < 20)
-//			if(effectiveHeading < -Math.PI/2)
-//				return robocode.util.Utils.normalRelativeAngle(Math.PI - effectiveHeading);
-//			else
-//				return robocode.util.Utils.normalRelativeAngle(0 - effectiveHeading);
-//		
-//		return 0;
-//	}
 
 	private SimulatedGearbox prepare_simulation(IGearbox lastPlanned,
 			double rotation) {
 		SimulatedGearbox simulation;
 		simulation = new SimulatedGearbox();
 		simulation.Copy(lastPlanned);
-		simulation.setAhead(getCurrentDirection());
 		simulation.setTurnRightRadians(rotation);
 		return simulation;
 	}
@@ -125,14 +102,6 @@ public class PerpendicularMovementController extends PlannedMovementController {
 		if( Math.abs(rotation) > Math.PI/2)
 			rotation = robocode.util.Utils.normalRelativeAngle(rotation + Math.PI);
 		return rotation;
-	}
-
-	public double getCurrentDirection() {
-		return _currentDirection;
-	}
-	
-	public void setCurrentDirection(double ahead) {
-		_currentDirection = ahead;
 	}
 	
 }
