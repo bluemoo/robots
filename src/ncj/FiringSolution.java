@@ -7,7 +7,6 @@ public class FiringSolution {
 	private Vector2D _pRobot;
 	private Vector2D _pHit;
 	private long _timeHit;
-	private Wave _wave;
 	private double _timeUntilIntercept;
 	private Vector2D _vWave;
 
@@ -55,15 +54,6 @@ public class FiringSolution {
 	
 	public long getHitTime() {
 		return _timeHit;
-	}
-
-	public FiringSolution setWave(Wave wave) {
-		_wave = wave;
-		return this;
-	}
-	
-	public Wave getWave() {
-		return _wave;
 	}
 
 	public FiringSolution setTimeUntilIntercept(double time) {

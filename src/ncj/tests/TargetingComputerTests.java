@@ -48,7 +48,6 @@ public class TargetingComputerTests {
 		assertEquals(100, fs.getFiringPoint().getX(), .0001);
 		assertEquals(180, fs.getHitPoint().getY(), .0001);
 		assertEquals(13, fs.getHitTime());
-		assertSame(wave, fs.getWave());
 		assertEquals(4.4289, fs.getTimeUntilIntercept(),.0001);
 		assertEquals(-11, fs.getWaveVector().getX(), .0001);
 	}

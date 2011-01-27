@@ -8,6 +8,7 @@ public class Wave {
 	private double _x;
 	private double _y;
 	private long _time;
+	private FiringSolution _solution;
 	
 	public Wave() {
 		
@@ -40,6 +41,14 @@ public class Wave {
 		return 20 - (3 * _power);
 	}
 
+	public FiringSolution getFiringSolution() {
+		return _solution;
+	}
+	
+	public void setFiringSolution(FiringSolution solution) {
+		_solution = solution;
+	}
+	
 	public boolean hasHit(IGearbox gearbox) {
 		double distance = Point2D.distance(gearbox.getX(), gearbox.getY(), getX(), getY());
 		double elapsedTime = gearbox.getTime() - getTime();

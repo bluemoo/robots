@@ -76,6 +76,11 @@ public class GunControllerTests {
 		assertEquals(_enemy.getLatestWave(), _targetingComputer.getWaveTargeted());
 	}
 	
+	@Test public void ShouldStoreFiringSolutionOnWave() {
+		_gun.next();
+		assertEquals(_gun.getLatestSolution(), _enemy.getLatestWave().getFiringSolution());
+	}
+	
 	@Test public void ShouldNotFireIfLastTickDidNotHaveRealWave() {
 		_bulletFired = false;
 		_gun.next();

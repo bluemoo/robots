@@ -64,7 +64,6 @@ public class TargetingComputer {
 		                           .setTime(firingLocation.getTime())
 		                           .setHitPoint(pHit)
 		                           .setHitTime(hit.getTime())
-		                           .setWave(wave)
 		                           .setTimeUntilIntercept(timeToIntercept)
 		                           .setWaveVector(vWave);
 	}

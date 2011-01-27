@@ -25,6 +25,7 @@ public class GunController {
 		
 		Wave wave = waveToTarget();
 		FiringSolution solution = _targetingComputer.calculate_firing_solution(wave); 
+		wave.setFiringSolution(solution);
 
 		removeOldSolutions(_solutions);
 		

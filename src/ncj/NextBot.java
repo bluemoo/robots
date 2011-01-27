@@ -94,15 +94,15 @@ public class NextBot extends AdvancedRobot {
 			g.drawOval((int)x2, (int)y2, 2 * (int)insideRadius, 2 * (int)insideRadius);
 		}
 		
-		for (FiringSolution solution : _gun.getActiveSolutions()) {
+		for (Wave wave : _enemy.waves) {
+			FiringSolution solution = wave.getFiringSolution();
 			if(getTime() <= solution.getTime())
 				continue;
 			
 			Vector2D pHit = solution.getHitPoint();
 			Vector2D pFire = solution.getFiringPoint();
 			Vector2D vBullet = solution.getVector();
-			Wave wave = solution.getWave();
-			
+
 			g.setColor(Color.WHITE);
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pHit.getX(), (int)pHit.getY());
 
