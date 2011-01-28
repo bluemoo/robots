@@ -38,7 +38,7 @@ public class EnemyAnalysis {
 		for (Wave wave : waves) {
 			if(wave.getTime() < _currentState.getTime() - 100) {
 				oldWaves.add(wave);
-				_log.write("Missed,");
+				_log.write("Missed,,");
 			}
 		}
 		waves.removeAll(oldWaves);
@@ -65,14 +65,16 @@ public class EnemyAnalysis {
 		if(waveThatHit != null)
 		{
 			FiringSolution solution = waveThatHit.getFiringSolution();
-			_log.write("Hit," + solution.getFiringAngle());
+			double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
+			_log.write("Hit," + solution.getFiringAngle() + "," + distance);
 		}
 	}
 	public void update_bullet_hit_bullet(long time, double x, double y) {
 		Wave waveThatHit = find(time, x, y);
 		waves.remove(waveThatHit);
 		FiringSolution solution = waveThatHit.getFiringSolution();
-		_log.write("Intercepted," + solution.getFiringAngle());
+		double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
+		_log.write("Intercepted," + solution.getFiringAngle() + "," + distance);
 	}
 
 	private Wave find(long time, double x, double y) {

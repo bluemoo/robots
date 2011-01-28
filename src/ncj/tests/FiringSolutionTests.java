@@ -56,4 +56,5 @@ public class FiringSolutionTests {
 		
 		assertEquals(Math.PI/4, solution.getFiringAngle(), .00002);
 	}
+	
 }

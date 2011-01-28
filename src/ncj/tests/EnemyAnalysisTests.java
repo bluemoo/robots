@@ -15,7 +15,7 @@ public class EnemyAnalysisTests {
 	
 	EnemyAnalysis _enemy;
 	EnemyState _latestEnemyState;
-	FiringSolution _solution = new FiringSolution().setEnemyPoint(new Vector2D(0,0)).setFiringPoint(new Vector2D(0, 0)).setWaveVector(new Vector2D(1, 1));
+	FiringSolution _solution = new FiringSolution().setEnemyPoint(new Vector2D(0,0)).setFiringPoint(new Vector2D(0, 0)).setWaveVector(new Vector2D(1, 1)).setHitPoint(new Vector2D(2, 3));
 	
 	@Before public void Setup() {
 		_enemy = new EnemyAnalysis();
