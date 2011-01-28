@@ -1,5 +1,7 @@
 package ncj.Movement;
 
+import java.util.Random;
+
 import ncj.EnemyAnalysis;
 import ncj.IGearbox;
 import ncj.SimulatedGearbox;

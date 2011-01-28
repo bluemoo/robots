@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import ncj.EnemyAnalysis;
 import ncj.EnemyState;
+import ncj.FiringSolution;
+import ncj.Vector2D;
 import ncj.Wave;
 
 import org.junit.Before;
@@ -13,6 +15,8 @@ public class EnemyAnalysisTests {
 	
 	EnemyAnalysis _enemy;
 	EnemyState _latestEnemyState;
+	FiringSolution _solution = new FiringSolution().setEnemyPoint(new Vector2D(0,0)).setFiringPoint(new Vector2D(0, 0)).setWaveVector(new Vector2D(1, 1));
+	
 	@Before public void Setup() {
 		_enemy = new EnemyAnalysis();
 		_latestEnemyState = new EnemyState().setEnergy(100).setPosition(50, 60).setTime(10);
@@ -68,7 +72,7 @@ public class EnemyAnalysisTests {
 	}
 	
 	@Test public void ShouldRemoveWaveWhenItHits() {
-		_enemy.waves.add(new Wave(3, new EnemyState().setPosition(300, 300).setTime(3)));
+		_enemy.waves.add(new Wave(3, new EnemyState().setPosition(300, 300).setTime(3)).setFiringSolution(_solution));
 		_enemy.update_hit_by_bullet(13, 411, 300);
 		
 		assertEquals(0, _enemy.waves.size());
@@ -86,7 +90,7 @@ public class EnemyAnalysisTests {
 	}
 	
 	@Test public void ShouldRemoveWaveIfBulletShotDown() {
-		_enemy.waves.add(new Wave(3, new EnemyState().setPosition(200, 100).setTime(10)));
+		_enemy.waves.add(new Wave(3, new EnemyState().setPosition(200, 100).setTime(10)).setFiringSolution(_solution));
 		_enemy.update_bullet_hit_bullet(11, 211, 100);
 		
 		assertEquals(0, _enemy.waves.size());

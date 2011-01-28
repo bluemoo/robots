@@ -2,8 +2,9 @@ package ncj;
 
 public class FiringSolution {
 
-	private Vector2D _vector;
+	private Vector2D _vInterceptingBullet;
 	private long _time;
+	private Vector2D _pEnemy;
 	private Vector2D _pRobot;
 	private Vector2D _pHit;
 	private long _timeHit;
@@ -11,11 +12,11 @@ public class FiringSolution {
 	private Vector2D _vWave;
 
 	public Vector2D getVector() {
-		return _vector;
+		return _vInterceptingBullet;
 	}
 
 	public FiringSolution setVector(Vector2D v) {
-		_vector = v;
+		_vInterceptingBullet = v;
 		return this;
 	}
 
@@ -113,5 +114,20 @@ public class FiringSolution {
 	
 	public Vector2D getWaveVector() {
 		return _vWave;
+	}
+
+	public Vector2D getEnemyPoint() {
+		return _pEnemy;
+	}
+
+	public FiringSolution setEnemyPoint(Vector2D pWaveStart) {
+		_pEnemy = pWaveStart;
+		return this;
+	}
+
+	public double getFiringAngle() {
+		Vector2D vEtoR = _pRobot.minus(_pEnemy);
+		double dotProduct = vEtoR.unit().dot(_vWave.unit());
+		return Math.acos(dotProduct);
 	}
 }

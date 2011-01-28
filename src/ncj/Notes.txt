@@ -14,6 +14,7 @@ Add random movement.
 		- Select between moving as far as possible in each direction
 		- Choose from a continuous set of possible locations, given the probability of intersection at each
 
+Properly handle the end of the round. Should not consider the energy drop to be fired bullets.
 
 Use precise intersection to get a better idea of where to block.
 

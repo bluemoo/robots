@@ -45,6 +45,7 @@ public class TargetingComputerTests {
 		assertEquals(11.12708, vector.getX(), .00001);
 		assertEquals(16.25663, vector.getY(), .00001);
 		assertEquals((long)4, fs.getTime());
+		assertEquals(209, fs.getEnemyPoint().getX(), .00001);
 		assertEquals(100, fs.getFiringPoint().getX(), .0001);
 		assertEquals(180, fs.getHitPoint().getY(), .0001);
 		assertEquals(13, fs.getHitTime());

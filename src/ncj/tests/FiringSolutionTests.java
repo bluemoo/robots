@@ -47,4 +47,13 @@ public class FiringSolutionTests {
 		assertEquals(11.5, solution.getTimeUntilIntercept(), .00001);
 		assertEquals(17.2973, solution.getVector().getX(), .0001);
 	}
+	
+	@Test public void ShouldCalculateWaveAngleOfFourtyFiveDegrees() {
+		FiringSolution solution = new FiringSolution()
+									.setWaveVector(new Vector2D(.5,.5))
+									.setFiringPoint(new Vector2D(10, 0))
+									.setEnemyPoint(new Vector2D(0, 0));
+		
+		assertEquals(Math.PI/4, solution.getFiringAngle(), .00002);
+	}
 }

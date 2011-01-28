@@ -62,6 +62,7 @@ public class TargetingComputer {
 		return new FiringSolution().setFiringPoint(pRobot)
 		                           .setVector(solution)
 		                           .setTime(firingLocation.getTime())
+		                           .setEnemyPoint(pWaveStart)
 		                           .setHitPoint(pHit)
 		                           .setHitTime(hit.getTime())
 		                           .setTimeUntilIntercept(timeToIntercept)

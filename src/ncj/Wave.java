@@ -45,8 +45,9 @@ public class Wave {
 		return _solution;
 	}
 	
-	public void setFiringSolution(FiringSolution solution) {
+	public Wave setFiringSolution(FiringSolution solution) {
 		_solution = solution;
+		return this;
 	}
 	
 	public boolean hasHit(IGearbox gearbox) {
