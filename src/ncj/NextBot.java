@@ -96,7 +96,7 @@ public class NextBot extends AdvancedRobot {
 		
 		for (Wave wave : _enemy.waves) {
 			FiringSolution solution = wave.getFiringSolution();
-			if(getTime() <= solution.getTime())
+			if(getTime() <= solution.getTime() || solution.getHitTime() < getTime())
 				continue;
 			
 			Vector2D pHit = solution.getHitPoint();

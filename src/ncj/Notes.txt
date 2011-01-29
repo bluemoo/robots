@@ -1,3 +1,7 @@
+Fix painting ( remove old white lines)
+
+NullPointerException when a bullet hits the wrong wave?
+
 Go to the location with the highest intersection probability.
 
 Add random movement.
@@ -5,6 +9,9 @@ Add random movement.
    - Random, taking into account probability of being able to block bullet given solution
 		- Select between moving as far as possible in each direction
 		- Choose from a continuous set of possible locations, given the probability of intersection at each
+   - Run analysis to see if weighted random movement does better than purely random.
+   
+Is the firing solution covering a position a few ticks too late? In other words, does the wave hit the front side of the robot in reality before it does in simulation?
 
 Does the movement currently 'go backwards' in the correct direction?
 
@@ -22,6 +29,7 @@ Adjust the intersection time of bullets by slightly adjusting where the bot move
 
 Properly handle the end of the round. Should not consider the energy drop to be fired bullets.
 
+Use a better wall smoother.
 
 Don't wait to fire at enemy bullets when they are fired, instead, fire at the bots maximum rate and just fire at the closest 'unblocked' wave. This may be simplified by firing at the furthest wave. Make sure that when you fire, not to bother intercepting any portion of the wave that was already cleared.
 
