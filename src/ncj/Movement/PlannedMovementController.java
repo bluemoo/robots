@@ -40,7 +40,6 @@ public class PlannedMovementController extends MovementControllerBase {
 			return;
 		_lastPlannedTime = plan.getTime() + plan.getNumberOfTicks() - 1;
 		_plans.put(plan.getTime(), plan);
-		System.out.println("new plan for time: " + plan.getTime() + " - " + _lastPlannedTime);
 	}
 	
 	public IGearbox getLastPlannedState() {

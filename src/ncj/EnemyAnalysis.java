@@ -51,6 +51,11 @@ public class EnemyAnalysis {
 		return false;
 	}
 
+	public int getNumberActiveWaves()
+	{
+		return waves.size();
+	}
+	
 	public Wave getLatestWave() {
 		return waves.get(waves.size()-1);
 	}
@@ -71,11 +76,23 @@ public class EnemyAnalysis {
 	}
 	
 	public void update_bullet_hit_bullet(long time, double x, double y) {
-		Wave waveThatHit = find(time, x, y);
-		waves.remove(waveThatHit);
-		FiringSolution solution = waveThatHit.getFiringSolution();
-		double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
-		_log.write("Intercepted," + solution.getFiringAngle() + "," + distance);
+		Wave waveThatHit = null;
+		FiringSolution solution = null;
+		
+		try
+		{
+			waveThatHit = find(time, x, y);
+			waves.remove(waveThatHit);
+			solution = waveThatHit.getFiringSolution();
+			double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
+			_log.write("Intercepted," + solution.getFiringAngle() + "," + distance);		
+		}
+		catch(Exception e)
+		{
+			System.out.println("wave: " + waveThatHit);
+			System.out.println("sol: " + solution);
+		}
+		
 	}
 
 	private Wave find(long time, double x, double y) {

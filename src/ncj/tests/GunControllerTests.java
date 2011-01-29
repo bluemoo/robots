@@ -7,6 +7,7 @@ import ncj.EnemyState;
 import ncj.FakeGearbox;
 import ncj.FiringSolution;
 import ncj.GunController;
+import ncj.TargetingComputer;
 import ncj.Vector2D;
 import ncj.Wave;
 
@@ -20,6 +21,7 @@ public class GunControllerTests {
 	private GunController _gun;
 	private EnemyAnalysis _enemy;
 	private Wave _lastWave = new Wave();
+	private int _numberActiveWaves = 1;
 	private boolean _bulletFired;
 	
 	@Before public void Setup() {
@@ -31,6 +33,9 @@ public class GunControllerTests {
 													   );
 		
 		_enemy = new EnemyAnalysis() {
+			@Override public int getNumberActiveWaves() {
+				return _numberActiveWaves;
+			}
 			@Override public Wave getLatestWave() {
 				return _lastWave;
 			};
@@ -58,16 +63,15 @@ public class GunControllerTests {
 		assertEquals(Math.PI/4.0, _current.getGunTurnRemainingRadians(), .00002);
 	}
 	
-	@Test public void ShouldTargetTheLatestWave()
+	@Test public void ShouldNotThrowExceptionIfThereAreNoWaves()
 	{
-		Wave wave = _gun.waveToTarget();
-		assertSame(_lastWave, wave);
+		_numberActiveWaves = 0;
+		_gun.next();
 	}
 	
-	@Test public void ShouldTargetFakeWave() {
-		_bulletFired = false;
+	@Test public void ShouldReturnLatestWave() {
 		Wave wave = _gun.waveToTarget();
-		assertEquals(null, wave);
+		assertEquals(_lastWave, wave);
 	}
 	
 	@Test public void ShouldUseSelectedWave() {
@@ -91,6 +95,7 @@ public class GunControllerTests {
 		_gun.next();
 		_bulletFired = false;
 		_current.setTime(4);
+		_current.setTurnGunRightRadians(0);
 		_gun.next();
 		assertEquals(true, _current.getWasFired());
 		
@@ -130,9 +135,22 @@ public class GunControllerTests {
 		_gun.next();
 		_bulletFired = false;
 		FiringSolution solution =  new FiringSolution().setVector(new Vector2D(11, 0)).setTime(_current.getTime());
+		_lastWave.setFiringSolution(solution);
 		_gun.getActiveSolutions().add(solution);
+		_current.setTurnGunRightRadians(0);
 		_gun.next();
 		assertEquals(3, _current.getFired(), .00001);
 	}
+	
 
+	@Test public void ShouldDiscardSolutionAndMakeNewOneIfTurrentNotAimedCorrectly() {
+		FiringSolution solution = new FiringSolution().setVector(new Vector2D(1, 2)).setTime(3);
+		_lastWave.setFiringSolution(solution);
+		_gun.getActiveSolutions().add(solution);
+		
+		_current.setTurnGunRightRadians(1);
+		_gun.next();
+		assertEquals(-1, _current.getFired(), .001);
+		assertNotSame(solution, _lastWave.getFiringSolution());
+	}
 }
