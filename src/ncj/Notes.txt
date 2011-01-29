@@ -1,14 +1,4 @@
-
-Does the movement currently 'go backwards' in the correct direction?
-
-Log entire solutions, and whether they succeeded or not, and analyze.
-    - Should bot try to move closer, or further?
-    - What is the success profile?
-	- Do different bots have different profiles?
-	
-Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
-
-Adjust the intersection time of bullets by slightly adjusting where the bot moves to, rather than adjusting the power of my bullet. Phrased another way: calculate the intersection, then just don't move quite as far, in order to be fully covered.
+Go to the location with the highest intersection probability.
 
 Add random movement.
    - Purely random?
@@ -16,14 +6,25 @@ Add random movement.
 		- Select between moving as far as possible in each direction
 		- Choose from a continuous set of possible locations, given the probability of intersection at each
 
-Properly handle the end of the round. Should not consider the energy drop to be fired bullets.
+Does the movement currently 'go backwards' in the correct direction?
 
-Use precise intersection to get a better idea of where to block.
+Figure out the correct equation for p(intersection|fired at my position, distance, angle)
+
+Should not be firing .7 energy bullets to block .1 energy bullets! In fact, is it even worth firing at all? What should it do? This is why it loses to DrussGT when Druss is low on energy.
 
 Determine whether to use an adjustment based on the potential payoff; in other words, never, ever, fire a bullet with more power than the one you're trying to intercept. Don't even fire if the chance of them missing is high enough, and their bullet power low enough?
 
 Sometimes shoot at the enemy if that has a better expected payoff than dodging.
+	
+Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
+
+Adjust the intersection time of bullets by slightly adjusting where the bot moves to, rather than adjusting the power of my bullet. Phrased another way: calculate the intersection, then just don't move quite as far, in order to be fully covered.
+
+Properly handle the end of the round. Should not consider the energy drop to be fired bullets.
+
 
 Don't wait to fire at enemy bullets when they are fired, instead, fire at the bots maximum rate and just fire at the closest 'unblocked' wave. This may be simplified by firing at the furthest wave. Make sure that when you fire, not to bother intercepting any portion of the wave that was already cleared.
+
+Use precise intersection to get a better idea of where to block.
 
 Learn where the enemy aims.
