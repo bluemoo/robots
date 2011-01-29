@@ -7,7 +7,6 @@ public class GunController {
 	private IGearbox _gearbox;
 	private TargetingComputer _targetingComputer;
 	private EnemyAnalysis _enemy;
-	private boolean _shouldFire;
 	private ArrayList<FiringSolution> _solutions = new ArrayList<FiringSolution>();
 	
 	public GunController(IGearbox gearbox, EnemyAnalysis enemy, TargetingComputer targetingComputer) {
@@ -17,23 +16,28 @@ public class GunController {
 	}
 	
 	public void next() {
-		if(_shouldFire) {
-			_gearbox.setFire(getLatestSolution().getPower());
-			System.out.println("Power: " + getLatestSolution().getPower() + " Speed: " + getLatestSolution().getVector().magnitude());
-			
+		FiringSolution latestSolution = getLatestSolution();
+		if(latestSolution != null && latestSolution.getTime() == _gearbox.getTime()) {
+			_gearbox.setFire(latestSolution.getPower());			
 		}
 		
 		Wave wave = waveToTarget();
-		FiringSolution solution = _targetingComputer.calculate_firing_solution(wave); 
-		wave.setFiringSolution(solution);
-
-		removeOldSolutions(_solutions);
-		
-		if(_shouldFire)
+		FiringSolution solution;
+		if( wave == null)
+		{
+			wave = new Wave(3, _enemy.getCurrentState());
+			solution = _targetingComputer.calculate_firing_solution(wave); 
+			
+		}
+		else
+		{
+			solution = _targetingComputer.calculate_firing_solution(wave); 
+			wave.setFiringSolution(solution);
 			_solutions.add(solution);
-
+		}
+		
+		removeOldSolutions(_solutions);
 		Vector2D vBullet = solution.getVector();
-
 		_gearbox.setTurnGunRightRadians(robocode.util.Utils.normalRelativeAngle(vBullet.bearing() - _gearbox.getGunHeadingRadians()));		
 	}
 
@@ -48,20 +52,18 @@ public class GunController {
 
 	public Wave waveToTarget() {
 		if(_enemy.bulletFired()) {
-			_shouldFire = true;
 			return _enemy.getLatestWave();
 		}
-		
-		_shouldFire = false;
-		return new Wave(3, _enemy.getCurrentState());
+		return null;
 	}
 
 	public ArrayList<FiringSolution> getActiveSolutions() {
-		// TODO Auto-generated method stub
 		return _solutions ;
 	}
 
 	public FiringSolution getLatestSolution() {
+		if(_solutions.size() == 0)
+			return null;
 		return _solutions.get(_solutions.size() - 1);
 	}
 

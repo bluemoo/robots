@@ -67,8 +67,7 @@ public class GunControllerTests {
 	@Test public void ShouldTargetFakeWave() {
 		_bulletFired = false;
 		Wave wave = _gun.waveToTarget();
-		assertEquals(3, wave.getPower(), .0001);
-		assertEquals(200, wave.getX(), .0001);
+		assertEquals(null, wave);
 	}
 	
 	@Test public void ShouldUseSelectedWave() {
@@ -91,6 +90,7 @@ public class GunControllerTests {
 	@Test public void ShouldFireOnlyIfLastTickHadRealWave() {
 		_gun.next();
 		_bulletFired = false;
+		_current.setTime(4);
 		_gun.next();
 		assertEquals(true, _current.getWasFired());
 		
@@ -129,7 +129,7 @@ public class GunControllerTests {
 	@Test public void ShouldUseSpecifiedBulletPower() {
 		_gun.next();
 		_bulletFired = false;
-		FiringSolution solution =  new FiringSolution().setVector(new Vector2D(11, 0));
+		FiringSolution solution =  new FiringSolution().setVector(new Vector2D(11, 0)).setTime(_current.getTime());
 		_gun.getActiveSolutions().add(solution);
 		_gun.next();
 		assertEquals(3, _current.getFired(), .00001);

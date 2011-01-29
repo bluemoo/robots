@@ -1,8 +1,6 @@
-Fix painting ( remove old white lines)
+Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
 
 NullPointerException when a bullet hits the wrong wave?
-
-Go to the location with the highest intersection probability.
 
 Add random movement.
    - Purely random?
@@ -10,6 +8,10 @@ Add random movement.
 		- Select between moving as far as possible in each direction
 		- Choose from a continuous set of possible locations, given the probability of intersection at each
    - Run analysis to see if weighted random movement does better than purely random.
+
+Go to the location with the highest intersection probability.
+
+Project several possible paths, and choose one.
    
 Is the firing solution covering a position a few ticks too late? In other words, does the wave hit the front side of the robot in reality before it does in simulation?
 
@@ -23,7 +25,6 @@ Determine whether to use an adjustment based on the potential payoff; in other w
 
 Sometimes shoot at the enemy if that has a better expected payoff than dodging.
 	
-Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
 
 Adjust the intersection time of bullets by slightly adjusting where the bot moves to, rather than adjusting the power of my bullet. Phrased another way: calculate the intersection, then just don't move quite as far, in order to be fully covered.
 

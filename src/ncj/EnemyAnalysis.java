@@ -69,6 +69,7 @@ public class EnemyAnalysis {
 			_log.write("Hit," + solution.getFiringAngle() + "," + distance);
 		}
 	}
+	
 	public void update_bullet_hit_bullet(long time, double x, double y) {
 		Wave waveThatHit = find(time, x, y);
 		waves.remove(waveThatHit);
