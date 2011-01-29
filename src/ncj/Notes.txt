@@ -1,4 +1,6 @@
 
+Does the movement currently 'go backwards' in the correct direction?
+
 Log entire solutions, and whether they succeeded or not, and analyze.
     - Should bot try to move closer, or further?
     - What is the success profile?
@@ -18,12 +20,9 @@ Properly handle the end of the round. Should not consider the energy drop to be 
 
 Use precise intersection to get a better idea of where to block.
 
-
 Determine whether to use an adjustment based on the potential payoff; in other words, never, ever, fire a bullet with more power than the one you're trying to intercept. Don't even fire if the chance of them missing is high enough, and their bullet power low enough?
 
 Sometimes shoot at the enemy if that has a better expected payoff than dodging.
-
-Move towards enemy, covering with bullet shield, and ram them. Will moving at an angle towards the enemy actually improve the intercept rate?
 
 Don't wait to fire at enemy bullets when they are fired, instead, fire at the bots maximum rate and just fire at the closest 'unblocked' wave. This may be simplified by firing at the furthest wave. Make sure that when you fire, not to bother intercepting any portion of the wave that was already cleared.
 
