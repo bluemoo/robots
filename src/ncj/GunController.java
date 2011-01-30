@@ -50,7 +50,7 @@ public class GunController {
 			else
 			{
 				wave.setFiringSolution(null);
-				System.out.println("Skipped firing solution.");
+				System.out.println("Skipped firing solution at turn: " + _gearbox.getTime());
 
 			}
 		}

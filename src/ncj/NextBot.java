@@ -120,10 +120,9 @@ public class NextBot extends AdvancedRobot {
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeHead.getX(), (int)pShadowEdgeHead.getY());
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeTail.getX(), (int)pShadowEdgeTail.getY());
 			
-			
+			g.setColor(Color.WHITE);
 			Vector2D pHit = solution.getHitPoint();
 			g.drawRect((int)pHit.getX()-18, (int)pHit.getY() - 18, 35, 35);
-			
 		}
 		
 		g.setColor(Color.green);

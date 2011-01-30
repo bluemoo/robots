@@ -75,13 +75,23 @@ public class TargetingComputerTests {
 		assertEquals(8.63638, vector.getY(), .00001);
 	}
 	
-	@Test public void ShouldAdjustFiringSolutionForAccuracy()
+//	@Test public void ShouldAdjustFiringSolutionForAccuracy()
+//	{
+//		_current.setVelocity(8).setPosition(100, 108).setTime(4).setAhead(10000);
+//		Wave wave = new Wave(3, new EnemyState().setPosition(50, 100).setTime(3));
+//		
+//		FiringSolution fs = _targeting.calculate_firing_solution(wave);
+//		
+//		assertEquals(1.5, fs.getTimeUntilIntercept(), .00001);
+//	}
+
+	@Test public void ShouldNotAdjustFiringSolutionForAccuracy()
 	{
 		_current.setVelocity(8).setPosition(100, 108).setTime(4).setAhead(10000);
 		Wave wave = new Wave(3, new EnemyState().setPosition(50, 100).setTime(3));
 		
 		FiringSolution fs = _targeting.calculate_firing_solution(wave);
 		
-		assertEquals(1.5, fs.getTimeUntilIntercept(), .00001);
+		assertEquals(1.02077, fs.getTimeUntilIntercept(), .00001);
 	}
 }

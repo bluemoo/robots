@@ -74,7 +74,7 @@ public class TargetingComputer {
 		IGearbox nextLocation = calculate_firing_location();
 
 		FiringSolution solution = solve(wave, nextLocation);
-		solution.adjust();
+		//solution.adjust();
 		return solution;
 	}
 
