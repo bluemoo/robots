@@ -96,13 +96,13 @@ public class NextBot extends AdvancedRobot {
 		
 		for (Wave wave : _enemy.waves) {
 			FiringSolution solution = wave.getFiringSolution();
-			if(getTime() <= solution.getTime() || solution.getHitTime() < getTime())
+			if(getTime() <= solution.getTimeToFire() || solution.getTimeEnemyBulletHits() < getTime())
 				continue;
 			
-			Vector2D pFire = solution.getFiringPoint();
-			Vector2D vBullet = solution.getVector();
+			Vector2D pFire = solution.getPointToFireFrom();
+			Vector2D vBullet = solution.getIntersectingBullet();
 
-			long elapsed = this.getTime() - solution.getTime();
+			long elapsed = this.getTime() - solution.getTimeToFire();
 			Vector2D pHead = pFire.plus(vBullet.times(elapsed));
 			Vector2D pTail = pHead.minus(vBullet);
 			
@@ -113,7 +113,7 @@ public class NextBot extends AdvancedRobot {
 			
 			Vector2D pHeadIntercept = pFire.plus(vBullet.times(Math.ceil(solution.getTimeUntilIntercept())));
 			Vector2D pTailIntercept = pHeadIntercept.minus(vBullet);
-			elapsed = solution.getHitTime()-wave.getTime();
+			elapsed = solution.getTimeEnemyBulletHits()-wave.getTime();
 			Vector2D pWaveStart = new Vector2D(wave.getX(), wave.getY());
 			Vector2D pShadowEdgeHead = pWaveStart.plus(pHeadIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
 			Vector2D pShadowEdgeTail = pWaveStart.plus(pTailIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
@@ -121,7 +121,7 @@ public class NextBot extends AdvancedRobot {
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeTail.getX(), (int)pShadowEdgeTail.getY());
 			
 			g.setColor(Color.WHITE);
-			Vector2D pHit = solution.getHitPoint();
+			Vector2D pHit = solution.getPointEnemyBulletHits();
 			g.drawRect((int)pHit.getX()-18, (int)pHit.getY() - 18, 35, 35);
 		}
 		

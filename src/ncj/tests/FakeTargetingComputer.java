@@ -12,13 +12,13 @@ public class FakeTargetingComputer extends TargetingComputer {
 
 		public FakeTargetingComputer(FiringSolution solutionToReturn) {
 			_solution = solutionToReturn;
-			_time = solutionToReturn.getTime();
+			_time = solutionToReturn.getTimeToFire();
 		}
 		
 		@Override
 		public FiringSolution calculate_firing_solution(Wave wave) {
 			_wave = wave;
-			_solution.setTime(_time);
+			_solution.setTimeToFire(_time);
 			_time++;
 			return _solution;
 		}

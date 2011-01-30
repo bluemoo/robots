@@ -11,49 +11,49 @@ public class FiringSolution {
 	private double _timeUntilIntercept;
 	private Vector2D _vWave;
 
-	public Vector2D getVector() {
+	public Vector2D getIntersectingBullet() {
 		return _vInterceptingBullet;
 	}
 
-	public FiringSolution setVector(Vector2D v) {
+	public FiringSolution setIntersectingBullet(Vector2D v) {
 		_vInterceptingBullet = v;
 		return this;
 	}
 
-	public FiringSolution setTime(long time) {
+	public FiringSolution setTimeToFire(long time) {
 		_time = time;
 		return this;
 	}
 	
-	public long getTime() {
+	public long getTimeToFire() {
 		return _time;
 	}
 
-	public FiringSolution setFiringPoint(Vector2D pRobot) {
+	public FiringSolution setPointToFireFrom(Vector2D pRobot) {
 		_pRobot = pRobot;
 		return this;
 	}
 	
-	public Vector2D getFiringPoint() {
+	public Vector2D getPointToFireFrom() {
 		return _pRobot;
 	}
 
-	public FiringSolution setHitPoint(Vector2D pHit) {
+	public FiringSolution setPointEnemyBulletHits(Vector2D pHit) {
 		_pHit = pHit;
 		
 		return this;
 	}
 	
-	public Vector2D getHitPoint() {
+	public Vector2D getPointEnemyBulletHits() {
 		return _pHit;
 	}
 
-	public FiringSolution setHitTime(long time) {
+	public FiringSolution setTimeEnemyBulletHits(long time) {
 		_timeHit = time;
 		return this;
 	}
 	
-	public long getHitTime() {
+	public long getTimeEnemyBulletHits() {
 		return _timeHit;
 	}
 
@@ -67,13 +67,15 @@ public class FiringSolution {
 	}
 
 	public double getPower() {
-		return (20 - getVector().magnitude())/3;
+		return (20 - getIntersectingBullet().magnitude())/3;
 	}
 	
 	public Vector2D getInterceptPoint() {
-		return getFiringPoint().plus(getVector().times(getTimeUntilIntercept()));
+		return getPointToFireFrom().plus(getIntersectingBullet().times(getTimeUntilIntercept()));
 	}
 
+	//This changes the power, and thus speed, of our bullet to cause the middle of the bullet
+	//to lie on the enemy bullet vector we are trying to intersect.
 	public void adjust() {
 		double interceptTime = getTimeUntilIntercept();
 		Vector2D pIntercept = getInterceptPoint();
@@ -88,21 +90,21 @@ public class FiringSolution {
 			interceptTime += 1;
 			pIntercept = pIntercept.plus(_vWave);
 			
-			Vector2D vBulletPath = pIntercept.minus(getFiringPoint());
+			Vector2D vBulletPath = pIntercept.minus(getPointToFireFrom());
 			speed = vBulletPath.magnitude()/interceptTime;
 			vBullet = vBulletPath.unit().times(speed);
 		} while(speed > 19.7);
 		
-		setVector(vBullet);
+		setIntersectingBullet(vBullet);
 		setTimeUntilIntercept(interceptTime);
 	}
 	
 	public void adjust2() {
 		double desiredTime = Math.ceil(getTimeUntilIntercept() - .5) + .5;
-		double desiredSpeed = (getTimeUntilIntercept() * getVector().magnitude())/desiredTime;
+		double desiredSpeed = (getTimeUntilIntercept() * getIntersectingBullet().magnitude())/desiredTime;
 		
 		if( Math.floor(desiredTime) == Math.floor(getTimeUntilIntercept())) {
-			setVector(getVector().unit().times(desiredSpeed));
+			setIntersectingBullet(getIntersectingBullet().unit().times(desiredSpeed));
 			setTimeUntilIntercept(desiredTime);
 		}
 	}
@@ -125,7 +127,7 @@ public class FiringSolution {
 		return this;
 	}
 
-	public double getFiringAngle() {
+	public double getMyAngularDisplacement() {
 		Vector2D vEtoR = _pRobot.minus(_pEnemy);
 		double dotProduct = vEtoR.unit().dot(_vWave.unit());
 		return Math.acos(dotProduct);

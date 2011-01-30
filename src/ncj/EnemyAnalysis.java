@@ -70,8 +70,8 @@ public class EnemyAnalysis {
 		if(waveThatHit != null)
 		{
 			FiringSolution solution = waveThatHit.getFiringSolution();
-			double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
-			_log.write("Hit," + solution.getFiringAngle() + "," + distance);
+			double distance = solution.getPointEnemyBulletHits().minus(solution.getEnemyPoint()).magnitude();
+			_log.write("Hit," + solution.getMyAngularDisplacement() + "," + distance);
 		}
 		else
 		{
@@ -88,8 +88,8 @@ public class EnemyAnalysis {
 		{
 			waves.remove(waveThatHit);
 			solution = waveThatHit.getFiringSolution();
-			double distance = solution.getHitPoint().minus(solution.getEnemyPoint()).magnitude();
-			_log.write("Intercepted," + solution.getFiringAngle() + "," + distance);		
+			double distance = solution.getPointEnemyBulletHits().minus(solution.getEnemyPoint()).magnitude();
+			_log.write("Intercepted," + solution.getMyAngularDisplacement() + "," + distance);		
 		}
 		else
 		{

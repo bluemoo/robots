@@ -41,14 +41,14 @@ public class TargetingComputerTests {
 		
 		FiringSolution fs = _targeting.solve(wave, _targeting.calculate_firing_location());
 		
-		Vector2D vector = fs.getVector();
+		Vector2D vector = fs.getIntersectingBullet();
 		assertEquals(11.82905, vector.getX(), .00001);
 		assertEquals(15.7532, vector.getY(), .00001);
-		assertEquals((long)4, fs.getTime());
+		assertEquals((long)4, fs.getTimeToFire());
 		assertEquals(209, fs.getEnemyPoint().getX(), .00001);
-		assertEquals(100, fs.getFiringPoint().getX(), .0001);
-		assertEquals(172, fs.getHitPoint().getY(), .0001);
-		assertEquals(12, fs.getHitTime());
+		assertEquals(100, fs.getPointToFireFrom().getX(), .0001);
+		assertEquals(172, fs.getPointEnemyBulletHits().getY(), .0001);
+		assertEquals(12, fs.getTimeEnemyBulletHits());
 		assertEquals(4.2996, fs.getTimeUntilIntercept(),.0001);
 		assertEquals(-10.9704, fs.getWaveVector().getX(), .0001);
 	}
@@ -59,7 +59,7 @@ public class TargetingComputerTests {
 		
 		FiringSolution fs = _targeting.solve(wave, _targeting.calculate_firing_location());
 		
-		Vector2D vector = fs.getVector();
+		Vector2D vector = fs.getIntersectingBullet();
 		assertEquals(0, vector.getX(), .00001);
 		assertEquals(-19.7, vector.getY(), .00001);
 	}
@@ -71,7 +71,7 @@ public class TargetingComputerTests {
 		
 		FiringSolution fs = _targeting.solve(wave, _targeting.calculate_firing_location());
 		
-		Vector2D vector = fs.getVector();
+		Vector2D vector = fs.getIntersectingBullet();
 		assertEquals(8.63638, vector.getY(), .00001);
 	}
 	

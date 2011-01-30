@@ -38,13 +38,13 @@ public class GunController {
 
 	private double required_gun_heading(FiringSolution solution)
 	{
-		Vector2D vBullet = solution.getVector();
+		Vector2D vBullet = solution.getIntersectingBullet();
 		return vBullet.bearing();		
 	}
 	
 	private void fire_if_time(Wave wave) {
 		FiringSolution latestSolution = wave.getFiringSolution();
-		if(latestSolution != null && latestSolution.getTime() == _gearbox.getTime()) {
+		if(latestSolution != null && latestSolution.getTimeToFire() == _gearbox.getTime()) {
 			if(_gearbox.getGunTurnRemainingRadians() == 0)
 				_gearbox.setFire(latestSolution.getPower());
 			else

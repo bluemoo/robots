@@ -59,12 +59,12 @@ public class TargetingComputer {
 		double waveRtoWSpeed = vWave.dot(uRtoW)/uRtoW.magnitude();
 		double timeToIntercept = vRtoW.magnitude()/(RtoWSpeed - waveRtoWSpeed);
 		
-		return new FiringSolution().setFiringPoint(pRobot)
-		                           .setVector(solution)
-		                           .setTime(firingLocation.getTime())
+		return new FiringSolution().setPointToFireFrom(pRobot)
+		                           .setIntersectingBullet(solution)
+		                           .setTimeToFire(firingLocation.getTime())
 		                           .setEnemyPoint(pWaveStart)
-		                           .setHitPoint(pHit)
-		                           .setHitTime(hit.getTime())
+		                           .setPointEnemyBulletHits(pHit)
+		                           .setTimeEnemyBulletHits(hit.getTime())
 		                           .setTimeUntilIntercept(timeToIntercept)
 		                           .setWaveVector(vWave);
 	}
