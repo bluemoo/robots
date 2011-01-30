@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Date;
 
-import ncj.Movement.MovementControllerBase;
-import ncj.Movement.PerpendicularMovementController;
+import ncj.Movement.PerpendicularMovementPlanner;
+import ncj.Movement.PlannedMovementController;
 import ncj.Movement.WallSmoothing;
 
 import robocode.AdvancedRobot;
@@ -18,7 +18,8 @@ import robocode.util.Utils;
 
 public class NextBot extends AdvancedRobot {
 
-	MovementControllerBase _movementController;
+	PlannedMovementController _movementController;
+	PerpendicularMovementPlanner _movementPlanner;
 	EnemyAnalysis _enemy;
 	Gearbox _gearbox;
 	GunController _gun;
@@ -37,7 +38,8 @@ public class NextBot extends AdvancedRobot {
 		_gearbox = new Gearbox(this);
 		_enemy = new EnemyAnalysis(_log);
 		
-		_movementController = new PerpendicularMovementController(_gearbox, _enemy, new WallSmoothing());
+		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
+		_movementPlanner = new PerpendicularMovementPlanner(_gearbox, _enemy, _movementController);
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
 		while(true)
@@ -51,6 +53,7 @@ public class NextBot extends AdvancedRobot {
 
 		adjustRadar(e);
 		_enemy.update(new EnemyState(e, _gearbox));
+		_movementPlanner.next();
 		_movementController.next();
 		_gun.next();
 	}
