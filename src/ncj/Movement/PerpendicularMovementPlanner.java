@@ -1,5 +1,10 @@
 package ncj.Movement;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 import ncj.EnemyAnalysis;
 import ncj.IGearbox;
 import ncj.Vector2D;
@@ -24,36 +29,76 @@ public class PerpendicularMovementPlanner {
 	
 	public MovementPlan calculatePlan(Wave wave) {
 		
+		ArrayList<MovementPlan> plans = calculatePlansToTry(wave);
+		Dictionary<MovementPlan, WaveHitResult> planResults = testPlans(plans, wave);
+		ArrayList<MovementPlan> plansThatDontHitAWall = findPlansThatDontHitAWall(plans, planResults);
+		
+		MovementPlan planToUse;
+		if(plansThatDontHitAWall.size() > 0)
+		{ 
+			planToUse = selectPlan(plansThatDontHitAWall);
+		}
+		else
+		{ 
+			planToUse = selectPlan(plans);
+			System.out.println("Actually PLANNING to hit a wall. Get a better algorithm.");
+		} 
+						
+		if( planToUse != null && planToUse.getNumberOfTicks() > 0)
+			return planToUse;
+		
+		return null;
+	}
+
+	private MovementPlan selectPlan(
+			ArrayList<MovementPlan> plansThatDontHitAWall) {
+		return plansThatDontHitAWall.get(0);
+	}
+
+	private ArrayList<MovementPlan> findPlansThatDontHitAWall(
+			ArrayList<MovementPlan> plans,
+			Dictionary<MovementPlan, WaveHitResult> planResults) {
+		ArrayList<MovementPlan> plansThatDontHitAWall = new ArrayList<MovementPlan>();
+		for(Iterator<MovementPlan> e = plans.iterator(); e.hasNext();)
+		{
+			MovementPlan plan = e.next();
+			if(planResults.get(plan).hitWall == false)
+				plansThatDontHitAWall.add(plan);
+		}
+		return plansThatDontHitAWall;
+	}
+
+	private ArrayList<MovementPlan> calculatePlansToTry(Wave wave) {
 		IGearbox lastPlanned = _movementController.getLastPlannedState();
 		double direction = lastPlanned.getDistanceRemaining();
 		if(direction == 0)
 			direction = Double.POSITIVE_INFINITY;
 		double rotation = calculateRotation(wave, lastPlanned);			
 
-		MovementPlan[] plans = new MovementPlan[] {
-													new MovementPlan().setAhead(direction).setTurn(rotation).setTime(lastPlanned.getTime()),
-													new MovementPlan().setAhead(direction*-1).setTurn(rotation).setTime(lastPlanned.getTime())
-												  };
-		MovementPlan plan = null;
-		for(int i = 0; i < plans.length; i++)
-		{
-			plan = plans[i];
-			plan.setNumberOfTicks(Integer.MAX_VALUE);
-			WaveHitResult result = BuildControllerToTest(plan).run_until_wave_hits(wave);
-			long elapsedTime = result.timeOfHit - lastPlanned.getTime();
-			plan.setNumberOfTicks(elapsedTime);
-
-			if(result.hitWall == false)
-				break;
-		}
-				
-		if( plan.getNumberOfTicks() > 0)
-			return plan;
-		
-		return null;
+		ArrayList<MovementPlan> plans = new ArrayList<MovementPlan>();
+		plans.add(new MovementPlan().setAhead(direction).setTurn(rotation).setTime(lastPlanned.getTime()));
+		plans.add(new MovementPlan().setAhead(direction*-1).setTurn(rotation).setTime(lastPlanned.getTime()));
+		return plans;
 	}
 
-	private PlannedMovementController BuildControllerToTest(MovementPlan plan)
+	private Dictionary<MovementPlan, WaveHitResult> testPlans(ArrayList<MovementPlan> plans, Wave wave)
+	{
+		Dictionary<MovementPlan, WaveHitResult> results = new Hashtable<MovementPlan, WaveHitResult>();
+			
+		for(int i = 0; i < plans.size(); i++)
+		{
+			MovementPlan plan = plans.get(i);
+			plan.setNumberOfTicks(Integer.MAX_VALUE);
+			WaveHitResult result = buildControllerToTest(plan).run_until_wave_hits(wave);
+			long elapsedTime = result.timeOfHit - plan.getTime();
+			plan.setNumberOfTicks(elapsedTime);
+			results.put(plan, result);
+		}
+		
+		return results;
+	}
+	
+	private PlannedMovementController buildControllerToTest(MovementPlan plan)
 	{
 		PlannedMovementController copiedPlans = new PlannedMovementController(_movementController.getLastPlannedState());
 		copiedPlans.Copy(_movementController);
