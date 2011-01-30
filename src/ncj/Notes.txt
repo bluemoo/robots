@@ -1,6 +1,6 @@
-Improve the aiming so that gun turret rotation speed doesn't prevent shots from going in the intended direction.
+Refactor gun controller tests. Get rid of the need to call the controller the first time to 'initialize'. Might not even need the fake enemy analysis?
 
-NullPointerException when a bullet hits the wrong wave?
+Fix NullPointerException when bullet hits bullet and the correct wave isn't identified.
 
 Add random movement.
    - Purely random?
@@ -16,6 +16,8 @@ Project several possible paths, and choose one.
 Is the firing solution covering a position a few ticks too late? In other words, does the wave hit the front side of the robot in reality before it does in simulation?
 
 Does the movement currently 'go backwards' in the correct direction?
+
+Account for bullets hitting the wrong wave in the firing statistics.
 
 Figure out the correct equation for p(intersection|fired at my position, distance, angle)
 

@@ -103,15 +103,24 @@ public class NextBot extends AdvancedRobot {
 			Vector2D pFire = solution.getFiringPoint();
 			Vector2D vBullet = solution.getVector();
 
-			g.setColor(Color.WHITE);
-			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pHit.getX(), (int)pHit.getY());
-
 			long elapsed = this.getTime() - solution.getTime();
 			Vector2D pHead = pFire.plus(vBullet.times(elapsed));
 			Vector2D pTail = pHead.minus(vBullet);
 			
 			g.setColor(Color.RED);
 			g.drawLine((int)pHead.getX(), (int)pHead.getY(), (int)pTail.getX(), (int)pTail.getY());
+
+			g.setColor(Color.YELLOW);
+			
+			Vector2D pHeadIntercept = pFire.plus(vBullet.times(Math.ceil(solution.getTimeUntilIntercept())));
+			Vector2D pTailIntercept = pHeadIntercept.minus(vBullet);
+			elapsed = solution.getHitTime()-wave.getTime();
+			Vector2D pWaveStart = new Vector2D(wave.getX(), wave.getY());
+			Vector2D pShadowEdgeHead = pWaveStart.plus(pHeadIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
+			Vector2D pShadowEdgeTail = pWaveStart.plus(pTailIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
+			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeHead.getX(), (int)pShadowEdgeHead.getY());
+			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeTail.getX(), (int)pShadowEdgeTail.getY());
+			
 		}
 		
 		g.setColor(Color.green);
