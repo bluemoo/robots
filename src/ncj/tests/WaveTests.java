@@ -23,4 +23,36 @@ public class WaveTests {
 		gearbox.setTime(10);
 		assertEquals(true, wave.hasHit(gearbox));
 	}
+	
+	@Test public void ShouldHitRobotWhenWaveCoversTopRightCorner() {
+		Wave wave = new Wave(3, new EnemyState().setPosition(118+10.9, 118));
+		FakeGearbox gearbox = new FakeGearbox().setPosition(100, 100);
+		gearbox.setTime(1);
+		
+		assertEquals(true, wave.hasHit(gearbox));
+	}
+	
+	@Test public void ShouldHitRobotWhenWaveCoversTopLeftCorner() {
+		Wave wave = new Wave(3, new EnemyState().setPosition(82-10.9, 118));
+		FakeGearbox gearbox = new FakeGearbox().setPosition(100, 100);
+		gearbox.setTime(1);
+		
+		assertEquals(true, wave.hasHit(gearbox));
+	}
+	
+	@Test public void ShouldHitRobotWhenWaveCoversBottomLeftCorner() {
+		Wave wave = new Wave(3, new EnemyState().setPosition(82, 82 - 10.9));
+		FakeGearbox gearbox = new FakeGearbox().setPosition(100,100);
+		gearbox.setTime(1);
+		
+		assertEquals(true, wave.hasHit(gearbox));
+	}
+
+	@Test public void ShouldHitRobotWhenWaveCoversBottomRightCorner() {
+		Wave wave = new Wave(3, new EnemyState().setPosition(118, 82 - 10.9));
+		FakeGearbox gearbox = new FakeGearbox().setPosition(100,100);
+		gearbox.setTime(1);
+		
+		assertEquals(true, wave.hasHit(gearbox));
+	}
 }

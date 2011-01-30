@@ -42,15 +42,15 @@ public class TargetingComputerTests {
 		FiringSolution fs = _targeting.solve(wave, _targeting.calculate_firing_location());
 		
 		Vector2D vector = fs.getVector();
-		assertEquals(11.12708, vector.getX(), .00001);
-		assertEquals(16.25663, vector.getY(), .00001);
+		assertEquals(11.82905, vector.getX(), .00001);
+		assertEquals(15.7532, vector.getY(), .00001);
 		assertEquals((long)4, fs.getTime());
 		assertEquals(209, fs.getEnemyPoint().getX(), .00001);
 		assertEquals(100, fs.getFiringPoint().getX(), .0001);
-		assertEquals(180, fs.getHitPoint().getY(), .0001);
-		assertEquals(13, fs.getHitTime());
-		assertEquals(4.4289, fs.getTimeUntilIntercept(),.0001);
-		assertEquals(-11, fs.getWaveVector().getX(), .0001);
+		assertEquals(172, fs.getHitPoint().getY(), .0001);
+		assertEquals(12, fs.getHitTime());
+		assertEquals(4.2996, fs.getTimeUntilIntercept(),.0001);
+		assertEquals(-10.9704, fs.getWaveVector().getX(), .0001);
 	}
 
 	@Test public void ShouldCalculateInterceptionVectorForAnImmobileRobot()
@@ -66,13 +66,13 @@ public class TargetingComputerTests {
 
 	@Test public void ShouldCalculateInterceptionVectorForRobotLevelWithFiringCoordinateMovingUp()
 	{
-		_current.setVelocity(8).setPosition(100, 108).setTime(4).setAhead(10000);
+		_current.setVelocity(8).setPosition(118, 90).setTime(4).setAhead(10000);
 		Wave wave = new Wave(3, new EnemyState().setPosition(50, 100).setTime(3));
 		
 		FiringSolution fs = _targeting.solve(wave, _targeting.calculate_firing_location());
 		
 		Vector2D vector = fs.getVector();
-		assertEquals(8.49689, vector.getY(), .00001);
+		assertEquals(8.63638, vector.getY(), .00001);
 	}
 	
 	@Test public void ShouldAdjustFiringSolutionForAccuracy()

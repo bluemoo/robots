@@ -51,12 +51,23 @@ public class Wave {
 	}
 	
 	public boolean hasHit(IGearbox gearbox) {
-		double distance = Point2D.distance(gearbox.getX(), gearbox.getY(), getX(), getY());
 		double elapsedTime = gearbox.getTime() - getTime();
+		double robotX = gearbox.getX();
+		double robotY = gearbox.getY();
 		double radius = getVelocity() * elapsedTime;
-		
-		return distance < radius;
 
+		//Check corners
+		for(int i=-1; i<=1; i+=2)
+		{
+			for(int j=-1; j<=1; j+=2)
+			{
+				double distance = Point2D.distance(robotX+18*i, robotY+18*j, getX(), getY());
+				
+				if( distance < radius)
+					return true;
+			}
+		}
+		return false;
 	}
 
 }

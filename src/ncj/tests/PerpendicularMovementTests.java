@@ -34,7 +34,7 @@ public class PerpendicularMovementTests {
 		assertEquals(1, _controller.getPlans().size());
 		assertEquals(Double.POSITIVE_INFINITY, plan.getAhead(), .0001);
 		assertEquals(0, plan.getTurn(), .0001);
-		assertEquals(17, plan.getNumberOfTicks());
+		assertEquals(14, plan.getNumberOfTicks());
 	}
 	
 	@Test public void ShouldStartPlanningAtEndOfPreviousPlan() {
@@ -43,21 +43,21 @@ public class PerpendicularMovementTests {
 		_gearbox.setPosition(310, 200).setVelocity(4).setTime(4);
 		
 		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(310, 50).setTime(4)));
-		assertEquals(17, plan.getTime());
+		assertEquals(14, plan.getTime());
 		
 	}
 	
 	@Test public void ShouldOnlyPlanUntilWaveHits() {
 		_gearbox.setHeading(Math.PI/2).setTime(113);
 		
-		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 50).setTime(100)));
+		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 50).setTime(101)));
 		assertEquals(1, plan.getNumberOfTicks());
 	}
 	
 	@Test public void ShouldRotateIfNecessary() {
 		_gearbox.setHeading(Math.PI/4).setTime(113);
 		
-		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 50).setTime(100)));
+		MovementPlan plan = _controller.calculatePlan(new Wave(3, new EnemyState().setPosition(300, 50).setTime(101)));
 		assertEquals(Math.PI/4, plan.getTurn(), .0001);
 	}
 	
@@ -86,7 +86,7 @@ public class PerpendicularMovementTests {
 		TargetingComputer targeting = new TargetingComputer(_controller);
 		IGearbox gearbox = targeting.hits_at(new Wave(3, new EnemyState().setPosition(300, 100)));
 		
-		assertEquals(10, gearbox.getTime());
+		assertEquals(8, gearbox.getTime());
 	}
 	
 	@Test public void ShouldTravelBackwardsIfPlanWouldTakeRobotIntoWall() {

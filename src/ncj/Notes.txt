@@ -1,3 +1,4 @@
+
 Add random movement.
    - Purely random?
    - Random, taking into account probability of being able to block bullet given solution
@@ -7,9 +8,9 @@ Add random movement.
 
 Go to the location with the highest intersection probability.
 
-Project several possible paths, and choose one.
-   
-Is the firing solution covering a position a few ticks too late? In other words, does the wave hit the front side of the robot in reality before it does in simulation?
+Project several possible paths, and choose one.   
+
+Learn where the enemy aims.
 
 Does the movement currently 'go backwards' in the correct direction?
 
@@ -21,8 +22,7 @@ Should not be firing .7 energy bullets to block .1 energy bullets! In fact, is i
 
 Determine whether to use an adjustment based on the potential payoff; in other words, never, ever, fire a bullet with more power than the one you're trying to intercept. Don't even fire if the chance of them missing is high enough, and their bullet power low enough?
 
-Sometimes shoot at the enemy if that has a better expected payoff than dodging.
-	
+Sometimes shoot at the enemy if that has a better expected payoff than intercepting.	
 
 Adjust the intersection time of bullets by slightly adjusting where the bot moves to, rather than adjusting the power of my bullet. Phrased another way: calculate the intersection, then just don't move quite as far, in order to be fully covered.
 
@@ -31,9 +31,5 @@ Properly handle the end of the round. Should not consider the energy drop to be 
 Use a better wall smoother.
 
 Don't wait to fire at enemy bullets when they are fired, instead, fire at the bots maximum rate and just fire at the closest 'unblocked' wave. This may be simplified by firing at the furthest wave. Make sure that when you fire, not to bother intercepting any portion of the wave that was already cleared.
-
-Use precise intersection to get a better idea of where to block.
-
-Learn where the enemy aims.
 
 Very rarely, the wrong wave is removed during an intersection or hit. This causes a null to be returned by EnemyAnalysis.find when dealing with bullet hit bullet or hit by bullet. Fix this!
