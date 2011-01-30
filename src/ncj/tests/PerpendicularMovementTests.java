@@ -8,6 +8,7 @@ import ncj.IGearbox;
 import ncj.TargetingComputer;
 import ncj.Wave;
 import ncj.Movement.MovementPlan;
+import ncj.Movement.MovementPlanner;
 import ncj.Movement.PerpendicularMovementPlanner;
 import ncj.Movement.PlannedMovementController;
 
@@ -16,7 +17,7 @@ import org.junit.Test;
 
 public class PerpendicularMovementTests {
 	FakeGearbox _gearbox;
-	PerpendicularMovementPlanner _planner;
+	MovementPlanner _planner;
 	PlannedMovementController _controller;
 	
 	@Before public void Setup() {

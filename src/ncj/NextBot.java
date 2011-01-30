@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Date;
 
+import ncj.Movement.MovementPlanner;
 import ncj.Movement.PerpendicularMovementPlanner;
 import ncj.Movement.PlannedMovementController;
 import ncj.Movement.WallSmoothing;
@@ -19,7 +20,7 @@ import robocode.util.Utils;
 public class NextBot extends AdvancedRobot {
 
 	PlannedMovementController _movementController;
-	PerpendicularMovementPlanner _movementPlanner;
+	MovementPlanner _movementPlanner;
 	EnemyAnalysis _enemy;
 	Gearbox _gearbox;
 	GunController _gun;
