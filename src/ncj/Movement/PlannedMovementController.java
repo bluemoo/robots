@@ -4,6 +4,8 @@ import java.util.Hashtable;
 
 import ncj.FakeGearbox;
 import ncj.IGearbox;
+import ncj.SimulatedGearbox;
+import ncj.Wave;
 
 public class PlannedMovementController extends MovementControllerBase {
 	private Hashtable<Long, MovementPlan> _plans = new Hashtable<Long, MovementPlan>(); 
@@ -62,11 +64,44 @@ public class PlannedMovementController extends MovementControllerBase {
 	public long getLastPlannedTime() {
 		return _lastPlannedTime;
 	}
+
+	public class WaveHitResult
+	{
+		long timeOfHit;
+		boolean hitWall;
+
+		public WaveHitResult(long time, boolean h)
+		{
+			timeOfHit = time;
+			hitWall = h;
+		}
+	}
 	
+	public WaveHitResult run_until_wave_hits(Wave wave) {
+		
+		boolean hitWall = false;
+		IGearbox current = getCurrentGearbox();
+		if(!wave.hasHit(current))
+		{
+			for( SimulatedGearbox simulation: predict_future_position())
+			{
+				if(simulation.getHitWall())
+					hitWall = true;
+				if( wave.hasHit(simulation))
+				{
+					return new WaveHitResult(simulation.getTime(), hitWall);
+				}
+			}
+		}
+		return new WaveHitResult(current.getTime(), false);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void Copy(PlannedMovementController controller) {
 		_plans = (Hashtable<Long, MovementPlan>) controller._plans.clone();
 		_lastPlannedTime = controller._lastPlannedTime;
 		_wallSmoothing = controller._wallSmoothing;
 	}
+	
+	
 }

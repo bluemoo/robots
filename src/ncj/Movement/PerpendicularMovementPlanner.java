@@ -2,9 +2,9 @@ package ncj.Movement;
 
 import ncj.EnemyAnalysis;
 import ncj.IGearbox;
-import ncj.SimulatedGearbox;
 import ncj.Vector2D;
 import ncj.Wave;
+import ncj.Movement.PlannedMovementController.WaveHitResult;
 
 public class PerpendicularMovementPlanner {
 	PlannedMovementController _movementController;
@@ -29,58 +29,38 @@ public class PerpendicularMovementPlanner {
 		if(direction == 0)
 			direction = Double.POSITIVE_INFINITY;
 		double rotation = calculateRotation(wave, lastPlanned);			
-	
-		WaveHitResult result = run_until_wave_hits(wave, rotation, direction);	
-		
-		if(result.hitWall) {
-			direction *= -1;	
-			result = run_until_wave_hits(wave, rotation, direction);
+
+		MovementPlan[] plans = new MovementPlan[] {
+													new MovementPlan().setAhead(direction).setTurn(rotation).setTime(lastPlanned.getTime()),
+													new MovementPlan().setAhead(direction*-1).setTurn(rotation).setTime(lastPlanned.getTime())
+												  };
+		MovementPlan plan = null;
+		for(int i = 0; i < plans.length; i++)
+		{
+			plan = plans[i];
+			plan.setNumberOfTicks(Integer.MAX_VALUE);
+			WaveHitResult result = BuildControllerToTest(plan).run_until_wave_hits(wave);
+			long elapsedTime = result.timeOfHit - lastPlanned.getTime();
+			plan.setNumberOfTicks(elapsedTime);
+
+			if(result.hitWall == false)
+				break;
 		}
-		
-		long elapsedTime = result.gearbox.getTime() - lastPlanned.getTime();
-		if( elapsedTime > 0)
-			return new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
+				
+		if( plan.getNumberOfTicks() > 0)
+			return plan;
 		
 		return null;
 	}
 
-	private class WaveHitResult
+	private PlannedMovementController BuildControllerToTest(MovementPlan plan)
 	{
-		IGearbox gearbox;
-		boolean hitWall;
-
-		public WaveHitResult(IGearbox g, boolean h)
-		{
-			gearbox = g;
-			hitWall = h;
-		}
+		PlannedMovementController copiedPlans = new PlannedMovementController(_movementController.getLastPlannedState());
+		copiedPlans.Copy(_movementController);
+		copiedPlans.setMovement(plan);
+		return copiedPlans;
 	}
 	
-	private WaveHitResult run_until_wave_hits(Wave wave, double rotation, double direction) {
-		IGearbox lastPlanned = _movementController.getLastPlannedState();
-		
-		MovementPlan planToTest = new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
-		
-		PlannedMovementController copiedPlans = new PlannedMovementController(lastPlanned);
-		copiedPlans.Copy(_movementController);
-		copiedPlans.setMovement(planToTest);
-
-		boolean hitWall = false;
-		if(!wave.hasHit(lastPlanned))
-		{
-			for( SimulatedGearbox simulation: copiedPlans.predict_future_position())
-			{
-				if(simulation.getHitWall())
-					hitWall = true;
-				if( wave.hasHit(simulation))
-				{
-					return new WaveHitResult(simulation, hitWall);
-				}
-			}
-		}
-		return new WaveHitResult(lastPlanned, false);
-	}
-
 	private double calculateRotation(Wave wave, IGearbox gearbox) {
 		Vector2D pRobot = new Vector2D(gearbox.getX(), gearbox.getY());
 		Vector2D pWave = new Vector2D(wave.getX(), wave.getY());

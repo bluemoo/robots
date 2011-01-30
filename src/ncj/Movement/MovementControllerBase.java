@@ -30,6 +30,11 @@ public abstract class MovementControllerBase {
 		return true;
 	}
 	
+	public IGearbox getCurrentGearbox()
+	{
+		return _gearbox;
+	}
+	
 	public class FuturePosition implements Iterable<SimulatedGearbox> {
 		
 		public class Iterator implements java.util.Iterator<SimulatedGearbox> {
