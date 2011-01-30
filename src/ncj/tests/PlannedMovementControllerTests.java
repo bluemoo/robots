@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import ncj.FakeGearbox;
 import ncj.IGearbox;
+import ncj.SimulatedGearbox;
 import ncj.Movement.MovementPlan;
 import ncj.Movement.PlannedMovementController;
 
@@ -47,27 +48,27 @@ public class PlannedMovementControllerTests {
 	}
 	
 	@Test public void ShouldStopIteratingIfThereIsNoPlan() {
-		Iterator<IGearbox> iter = _controller.predict_future_position().iterator();
+		Iterator<SimulatedGearbox> iter = _controller.predict_future_position().iterator();
 		assertEquals(false, iter.hasNext());
 	}
 	
 	@Test public void ShouldIterateIfThereIsPlan() {
 		_controller.setMovement(new MovementPlan());
-		Iterator<IGearbox> iter = _controller.predict_future_position().iterator();
+		Iterator<SimulatedGearbox> iter = _controller.predict_future_position().iterator();
 		assertEquals(true, iter.hasNext());
 	}
 	
 	@Test public void ShouldNotIterateIfPlanIsInThePast() {
 		_controller.setMovement(new MovementPlan().setTime(1));
 		_gearbox.setTime(2);
-		Iterator<IGearbox> iter = _controller.predict_future_position().iterator();
+		Iterator<SimulatedGearbox> iter = _controller.predict_future_position().iterator();
 		assertEquals(false, iter.hasNext());	
 	}
 	
 	@Test public void ShouldIterateUntilEndOfPlannedTime() {
 		_controller.setMovement( new MovementPlan().setTime(3).setNumberOfTicks(3));
 		_gearbox.setTime(5);
-		Iterator<IGearbox> iter = _controller.predict_future_position().iterator();
+		Iterator<SimulatedGearbox> iter = _controller.predict_future_position().iterator();
 		
 		assertEquals(true, iter.hasNext());
 	

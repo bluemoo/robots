@@ -30,25 +30,35 @@ public class PerpendicularMovementPlanner {
 			direction = Double.POSITIVE_INFINITY;
 		double rotation = calculateRotation(wave, lastPlanned);			
 	
-		boolean ranIntoWall = false;
-		SimulatedGearbox simulation = run_until_wave_hits(wave, rotation, direction);	
-		ranIntoWall = simulation.getHitWall();
+		WaveHitResult result = run_until_wave_hits(wave, rotation, direction);	
 		
-		if(ranIntoWall) {
+		if(result.hitWall) {
 			direction *= -1;	
-			simulation = run_until_wave_hits(wave, rotation, direction);
+			result = run_until_wave_hits(wave, rotation, direction);
 		}
 		
-		long elapsedTime = simulation.getTime() - lastPlanned.getTime();
+		long elapsedTime = result.gearbox.getTime() - lastPlanned.getTime();
 		if( elapsedTime > 0)
 			return new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(elapsedTime).setTime(lastPlanned.getTime());
 		
 		return null;
 	}
 
-	private SimulatedGearbox run_until_wave_hits(Wave wave, double rotation, double direction) {
+	private class WaveHitResult
+	{
+		IGearbox gearbox;
+		boolean hitWall;
+
+		public WaveHitResult(IGearbox g, boolean h)
+		{
+			gearbox = g;
+			hitWall = h;
+		}
+	}
+	
+	private WaveHitResult run_until_wave_hits(Wave wave, double rotation, double direction) {
 		IGearbox lastPlanned = _movementController.getLastPlannedState();
-		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
+		
 		MovementPlan planToTest = new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
 		
 		PlannedMovementController copiedPlans = new PlannedMovementController(lastPlanned);
@@ -56,28 +66,19 @@ public class PerpendicularMovementPlanner {
 		copiedPlans.setMovement(planToTest);
 
 		boolean hitWall = false;
-		if(!wave.hasHit(simulation))
+		if(!wave.hasHit(lastPlanned))
 		{
-			for( IGearbox gearbox : copiedPlans.predict_future_position())
+			for( SimulatedGearbox simulation: copiedPlans.predict_future_position())
 			{
-				simulation = (SimulatedGearbox)gearbox;
 				if(simulation.getHitWall())
 					hitWall = true;
 				if( wave.hasHit(simulation))
-					break;
+				{
+					return new WaveHitResult(simulation, hitWall);
+				}
 			}
 		}
-		simulation.setHitWall(hitWall);
-		return simulation;
-	}
-
-	private SimulatedGearbox prepare_simulation(IGearbox lastPlanned,
-			double rotation) {
-		SimulatedGearbox simulation;
-		simulation = new SimulatedGearbox();
-		simulation.Copy(lastPlanned);
-		simulation.setTurnRightRadians(rotation);
-		return simulation;
+		return new WaveHitResult(lastPlanned, false);
 	}
 
 	private double calculateRotation(Wave wave, IGearbox gearbox) {

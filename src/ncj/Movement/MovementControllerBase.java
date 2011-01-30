@@ -30,9 +30,9 @@ public abstract class MovementControllerBase {
 		return true;
 	}
 	
-	public class FuturePosition implements Iterable<IGearbox> {
+	public class FuturePosition implements Iterable<SimulatedGearbox> {
 		
-		public class Iterator implements java.util.Iterator<IGearbox> {
+		public class Iterator implements java.util.Iterator<SimulatedGearbox> {
 			SimulatedGearbox _gearbox;
 			
 			public Iterator(IGearbox gearbox) {
@@ -46,7 +46,7 @@ public abstract class MovementControllerBase {
 			}
 	
 			@Override
-			public IGearbox next() {
+			public SimulatedGearbox next() {
 				set_controls(_gearbox);
 				_gearbox.next();
 				return _gearbox;
@@ -59,7 +59,7 @@ public abstract class MovementControllerBase {
 		}
 
 		@Override
-		public java.util.Iterator<IGearbox> iterator() {
+		public java.util.Iterator<SimulatedGearbox> iterator() {
 			return new Iterator(new FakeGearbox().Copy(_gearbox));
 		}
 	}

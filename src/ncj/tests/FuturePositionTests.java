@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import ncj.FakeGearbox;
 import ncj.IGearbox;
+import ncj.SimulatedGearbox;
 import ncj.Movement.MovementControllerBase;
 import ncj.Movement.UpAndDownMovementController;
 
@@ -13,7 +14,7 @@ public class FuturePositionTests {
 	@Test public void FirstValueShouldNextStateWithMovementControlsApplied() {
 		FakeGearbox gearbox = new FakeGearbox().setPosition(300, 400);
 		MovementControllerBase controller = new UpAndDownMovementController(gearbox);
-		java.util.Iterator<IGearbox> itr = controller.predict_future_position().iterator();
+		java.util.Iterator<SimulatedGearbox> itr = controller.predict_future_position().iterator();
 		
 		IGearbox first = itr.next();
 		assertEquals(300, first.getX(), .0001);
