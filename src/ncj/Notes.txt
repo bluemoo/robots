@@ -1,5 +1,3 @@
-Fix NullPointerException when bullet hits bullet and the correct wave isn't identified.
-
 Add random movement.
    - Purely random?
    - Random, taking into account probability of being able to block bullet given solution
@@ -37,3 +35,5 @@ Don't wait to fire at enemy bullets when they are fired, instead, fire at the bo
 Use precise intersection to get a better idea of where to block.
 
 Learn where the enemy aims.
+
+Very rarely, the wrong wave is removed during an intersection or hit. This causes a null to be returned by EnemyAnalysis.find when dealing with bullet hit bullet or hit by bullet. Fix this!
