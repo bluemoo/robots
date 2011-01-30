@@ -15,7 +15,7 @@ import ncj.Movement.PlannedMovementController;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PerpendicularMovementTests {
+public class PerpendicularMovementPlannerTests {
 	FakeGearbox _gearbox;
 	MovementPlanner _planner;
 	PlannedMovementController _controller;

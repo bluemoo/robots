@@ -8,7 +8,7 @@ import ncj.FiringSolution;
 import ncj.TargetingComputer;
 import ncj.Wave;
 
-public class ThreeSixtyMovementPlanner extends PerpendicularMovementPlanner {
+public class ThreeSixtyMovementPlanner extends MovementPlanner {
 
 	public ThreeSixtyMovementPlanner(EnemyAnalysis enemyAnalysis,
 			PlannedMovementController movementController) {
