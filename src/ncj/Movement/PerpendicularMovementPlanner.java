@@ -9,19 +9,13 @@ import ncj.Wave;
 public class PerpendicularMovementPlanner {
 	PlannedMovementController _movementController;
 	EnemyAnalysis _enemy;
-	IGearbox _gearbox;
 	
-	public PerpendicularMovementPlanner(IGearbox gearbox, EnemyAnalysis enemyAnalysis, PlannedMovementController movementController) {
+	public PerpendicularMovementPlanner(EnemyAnalysis enemyAnalysis, PlannedMovementController movementController) {
 		_movementController = movementController;
-		_gearbox = gearbox;
 		_enemy = enemyAnalysis;
 	}
 
-	public void next() {
-		plan(_gearbox);
-	}
-
-	private void plan(IGearbox gearbox) {
+	public void plan() {
 		if(_enemy.bulletFired()) {
 			MovementPlan plan = calculatePlan(_enemy.getLatestWave());
 			_movementController.setMovement(plan);
@@ -57,7 +51,7 @@ public class PerpendicularMovementPlanner {
 		SimulatedGearbox simulation = prepare_simulation(lastPlanned, rotation);
 		MovementPlan planToTest = new MovementPlan().setAhead(direction).setTurn(rotation).setNumberOfTicks(Integer.MAX_VALUE).setTime(lastPlanned.getTime());
 		
-		PlannedMovementController copiedPlans = new PlannedMovementController(_gearbox);
+		PlannedMovementController copiedPlans = new PlannedMovementController(lastPlanned);
 		copiedPlans.Copy(_movementController);
 		copiedPlans.setMovement(planToTest);
 

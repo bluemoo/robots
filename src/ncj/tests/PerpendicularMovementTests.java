@@ -23,7 +23,7 @@ public class PerpendicularMovementTests {
 		EnemyAnalysis enemyAnalysis = new EnemyAnalysis();
 		_gearbox = new FakeGearbox().setPosition(300, 200);
 		_controller = new PlannedMovementController(_gearbox);
-		_planner = new PerpendicularMovementPlanner(_gearbox, enemyAnalysis, _controller);
+		_planner = new PerpendicularMovementPlanner(enemyAnalysis, _controller);
 		
 		enemyAnalysis.update(new EnemyState().setPosition(300, 50).setEnergy(100));
 		enemyAnalysis.update(new EnemyState().setPosition(300, 50).setEnergy(97));		
@@ -32,7 +32,7 @@ public class PerpendicularMovementTests {
 	@Test public void ShouldMovePerpendicularToEnemyFire() {
 		_gearbox.setHeading(Math.PI/2);
 		
-		_planner.next();
+		_planner.plan();
 		MovementPlan plan = _controller.getPlans().get((long)0);
 		assertEquals(1, _controller.getPlans().size());
 		assertEquals(Double.POSITIVE_INFINITY, plan.getAhead(), .0001);
@@ -42,7 +42,7 @@ public class PerpendicularMovementTests {
 	
 	@Test public void ShouldStartPlanningAtEndOfPreviousPlan() {
 		_gearbox.setHeading(Math.PI/2);
-		_planner.next();
+		_planner.plan();
 		_gearbox.setPosition(310, 200).setVelocity(4).setTime(4);
 		
 		MovementPlan plan = _planner.calculatePlan(new Wave(3, new EnemyState().setPosition(310, 50).setTime(4)));

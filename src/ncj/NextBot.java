@@ -39,7 +39,7 @@ public class NextBot extends AdvancedRobot {
 		_enemy = new EnemyAnalysis(_log);
 		
 		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
-		_movementPlanner = new PerpendicularMovementPlanner(_gearbox, _enemy, _movementController);
+		_movementPlanner = new PerpendicularMovementPlanner(_enemy, _movementController);
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
 		while(true)
@@ -53,7 +53,7 @@ public class NextBot extends AdvancedRobot {
 
 		adjustRadar(e);
 		_enemy.update(new EnemyState(e, _gearbox));
-		_movementPlanner.next();
+		_movementPlanner.plan();
 		_movementController.next();
 		_gun.next();
 	}
