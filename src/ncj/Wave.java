@@ -1,6 +1,7 @@
 package ncj;
 
-import java.awt.geom.Point2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 public class Wave {
 
@@ -56,18 +57,9 @@ public class Wave {
 		double robotY = gearbox.getY();
 		double radius = getVelocity() * elapsedTime;
 
-		//Check corners
-		for(int i=-1; i<=1; i+=2)
-		{
-			for(int j=-1; j<=1; j+=2)
-			{
-				double distance = Point2D.distance(robotX+18*i, robotY+18*j, getX(), getY());
-				
-				if( distance < radius)
-					return true;
-			}
-		}
-		return false;
+		java.awt.geom.Ellipse2D waveEllipse = new Ellipse2D.Double(getX()-radius,getY()-radius,radius*2,radius*2);
+		Rectangle2D.Double robotBound = new Rectangle2D.Double(robotX-18, robotY - 18, 36, 36);
+		return waveEllipse.intersects(robotBound);
 	}
 
 }

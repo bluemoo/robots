@@ -31,7 +31,7 @@ public class TargetingComputerTests {
 		Wave wave = new Wave(3, new EnemyState().setPosition(120, 100).setTime(3));
 		IGearbox hit = _targeting.hits_at(wave);
 		
-		assertEquals(5, hit.getTime());
+		assertEquals(4, hit.getTime());
 	}
 	
 	@Test public void ShouldCalculateFiringSolution()

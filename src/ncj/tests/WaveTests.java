@@ -45,7 +45,8 @@ public class WaveTests {
 		FakeGearbox gearbox = new FakeGearbox().setPosition(100,100);
 		gearbox.setTime(1);
 		
-		assertEquals(true, wave.hasHit(gearbox));
+		boolean hashit = wave.hasHit(gearbox);
+		assertEquals(true, hashit);
 	}
 
 	@Test public void ShouldHitRobotWhenWaveCoversBottomRightCorner() {

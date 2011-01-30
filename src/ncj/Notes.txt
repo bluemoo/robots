@@ -1,4 +1,6 @@
 
+Project several possible paths, and choose one.   
+
 Add random movement.
    - Purely random?
    - Random, taking into account probability of being able to block bullet given solution
@@ -6,9 +8,9 @@ Add random movement.
 		- Choose from a continuous set of possible locations, given the probability of intersection at each
    - Run analysis to see if weighted random movement does better than purely random.
 
-Go to the location with the highest intersection probability.
+Put some code in to log when a bullet hits us inside the shadowed region. There's a bug somewhere that's allowing bullets through.
 
-Project several possible paths, and choose one.   
+Go to the location with the highest intersection probability.
 
 Learn where the enemy aims.
 

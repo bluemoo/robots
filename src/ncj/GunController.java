@@ -46,7 +46,12 @@ public class GunController {
 		FiringSolution latestSolution = wave.getFiringSolution();
 		if(latestSolution != null && latestSolution.getTimeToFire() == _gearbox.getTime()) {
 			if(_gearbox.getGunTurnRemainingRadians() == 0)
+			{
 				_gearbox.setFire(latestSolution.getPower());
+				
+				if(latestSolution.getPointEnemyBulletHits() != null)
+					System.out.println("Shadow %: " + latestSolution.getShadowPercentage());
+			}
 			else
 			{
 				wave.setFiringSolution(null);
