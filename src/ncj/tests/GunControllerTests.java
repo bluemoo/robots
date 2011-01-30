@@ -7,7 +7,6 @@ import ncj.EnemyState;
 import ncj.FakeGearbox;
 import ncj.FiringSolution;
 import ncj.GunController;
-import ncj.TargetingComputer;
 import ncj.Vector2D;
 import ncj.Wave;
 
@@ -23,14 +22,14 @@ public class GunControllerTests {
 	private Wave _lastWave = new Wave();
 	private int _numberActiveWaves = 1;
 	private boolean _bulletFired;
+	FiringSolution _solution;
 	
 	@Before public void Setup() {
 		_current = new FakeGearbox().setPosition(100, 100).setTime(3);
-		_targetingComputer = new FakeTargetingComputer(new FiringSolution()
-													   .setVector( new Vector2D(Math.cos(Math.PI*1.25), Math.sin(Math.PI*1.25)))
-													   .setTime(4)
-													   .setHitTime(10)
-													   );
+		_solution = new FiringSolution().setVector( new Vector2D(Math.cos(Math.PI*1.25), Math.sin(Math.PI*1.25)))
+									    .setTime(4)
+									    .setHitTime(10);
+		_targetingComputer = new FakeTargetingComputer(_solution);
 		
 		_enemy = new EnemyAnalysis() {
 			@Override public int getNumberActiveWaves() {
@@ -81,7 +80,7 @@ public class GunControllerTests {
 	
 	@Test public void ShouldStoreFiringSolutionOnWave() {
 		_gun.next();
-		assertEquals(_gun.getLatestSolution(), _enemy.getLatestWave().getFiringSolution());
+		assertEquals(_solution, _enemy.getLatestWave().getFiringSolution());
 	}
 	
 	@Test public void ShouldNotFireIfLastTickDidNotHaveRealWave() {
@@ -104,31 +103,11 @@ public class GunControllerTests {
 		assertEquals(false, _current.getWasFired());
 	}
 	
-	@Test public void ShouldStoreRealFiringSolutionsInList() {
+	@Test public void ShouldNotChangeTheSolutionForWave() {
 		_gun.next();
-		assertEquals(1, _gun.getActiveSolutions().size());
 		_bulletFired = false;
 		_gun.next();
-		assertEquals(1, _gun.getActiveSolutions().size());
-	}
-	
-	@Test public void ShouldPruneOldFiringSolutions() {
-		FiringSolution solution = new FiringSolution().setHitTime(2);
-		FiringSolution solution2 = new FiringSolution().setHitTime(2);
-		_gun.getActiveSolutions().add(solution);
-		_gun.getActiveSolutions().add(solution2);
-		
-		_gun.next();
-		assertEquals(1, _gun.getActiveSolutions().size());
-	}
-	
-	@Test public void ShouldGetLastActiveSolution() {
-		FiringSolution solution = new FiringSolution();
-		FiringSolution solution2 = new FiringSolution();
-		_gun.getActiveSolutions().add(solution);
-		_gun.getActiveSolutions().add(solution2);
-		
-		assertSame(solution2, _gun.getLatestSolution());
+		assertEquals(_solution, _lastWave.getFiringSolution());
 	}
 	
 	@Test public void ShouldUseSpecifiedBulletPower() {
@@ -136,7 +115,6 @@ public class GunControllerTests {
 		_bulletFired = false;
 		FiringSolution solution =  new FiringSolution().setVector(new Vector2D(11, 0)).setTime(_current.getTime());
 		_lastWave.setFiringSolution(solution);
-		_gun.getActiveSolutions().add(solution);
 		_current.setTurnGunRightRadians(0);
 		_gun.next();
 		assertEquals(3, _current.getFired(), .00001);
@@ -146,7 +124,6 @@ public class GunControllerTests {
 	@Test public void ShouldDiscardSolutionAndMakeNewOneIfTurrentNotAimedCorrectly() {
 		FiringSolution solution = new FiringSolution().setVector(new Vector2D(1, 2)).setTime(3);
 		_lastWave.setFiringSolution(solution);
-		_gun.getActiveSolutions().add(solution);
 		
 		_current.setTurnGunRightRadians(1);
 		_gun.next();

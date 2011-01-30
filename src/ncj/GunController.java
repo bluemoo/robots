@@ -1,13 +1,10 @@
 package ncj;
 
-import java.util.ArrayList;
-
 public class GunController {
 
 	private IGearbox _gearbox;
 	private TargetingComputer _targetingComputer;
 	private EnemyAnalysis _enemy;
-	private ArrayList<FiringSolution> _solutions = new ArrayList<FiringSolution>();
 	
 	public GunController(IGearbox gearbox, EnemyAnalysis enemy, TargetingComputer targetingComputer) {
 		_gearbox = gearbox;
@@ -28,16 +25,13 @@ public class GunController {
 		{
 			wave = new Wave(3, _enemy.getCurrentState());
 			solution = _targetingComputer.calculate_firing_solution(wave); 
-			
 		}
 		else
 		{
 			solution = _targetingComputer.calculate_firing_solution(wave); 
 			wave.setFiringSolution(solution);
-			_solutions.add(solution);
 		}
 		
-		removeOldSolutions(_solutions);
 		double angle = required_gun_heading(solution);
 		_gearbox.setTurnGunRightRadians(robocode.util.Utils.normalRelativeAngle( angle - _gearbox.getGunHeadingRadians()));		
 	}
@@ -62,27 +56,8 @@ public class GunController {
 		}
 	}
 
-	private void removeOldSolutions(ArrayList<FiringSolution> solutions) {
-		ArrayList<FiringSolution> old = new ArrayList<FiringSolution>();
-		for(FiringSolution solution : solutions) {
-			if( solution.getHitTime() < _gearbox.getTime())
-				old.add(solution);
-		}
-		solutions.removeAll(old);
-	}
-
 	public Wave waveToTarget() {
 		return _enemy.getLatestWave();
-	}
-
-	public ArrayList<FiringSolution> getActiveSolutions() {
-		return _solutions ;
-	}
-
-	public FiringSolution getLatestSolution() {
-		if(_solutions.size() == 0)
-			return null;
-		return _solutions.get(_solutions.size() - 1);
 	}
 
 

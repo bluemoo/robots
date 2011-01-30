@@ -99,7 +99,6 @@ public class NextBot extends AdvancedRobot {
 			if(getTime() <= solution.getTime() || solution.getHitTime() < getTime())
 				continue;
 			
-			Vector2D pHit = solution.getHitPoint();
 			Vector2D pFire = solution.getFiringPoint();
 			Vector2D vBullet = solution.getVector();
 

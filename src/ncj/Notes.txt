@@ -1,5 +1,3 @@
-Refactor gun controller tests. Get rid of the need to call the controller the first time to 'initialize'. Might not even need the fake enemy analysis?
-
 Fix NullPointerException when bullet hits bullet and the correct wave isn't identified.
 
 Add random movement.
