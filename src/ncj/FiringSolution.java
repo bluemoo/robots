@@ -132,4 +132,23 @@ public class FiringSolution {
 		double dotProduct = vEtoR.unit().dot(_vWave.unit());
 		return Math.acos(dotProduct);
 	}
+
+	public double getShadowPercentage() {
+		double HALF_BOT_WIDTH = 22;
+		
+		Vector2D pEnemy = getEnemyPoint();
+		double botToWaveDistance = getPointEnemyBulletHits().minus(pEnemy).magnitude();
+		double botAngularWidth = Math.atan(HALF_BOT_WIDTH/botToWaveDistance)*2;
+		
+		double elapsed = getTimeUntilIntercept();
+		Vector2D pHead = getPointToFireFrom().plus(getIntersectingBullet().times(elapsed));
+		Vector2D pTail = pHead.minus(getIntersectingBullet());
+
+		Vector2D uEnemyToHead = pHead.minus(pEnemy).unit();
+		Vector2D uEnemyToTail = pTail.minus(pEnemy).unit();
+		double shadowAngularWidth = Math.acos(uEnemyToHead.dot(uEnemyToTail));
+		
+		return shadowAngularWidth/botAngularWidth;
+		
+	}
 }

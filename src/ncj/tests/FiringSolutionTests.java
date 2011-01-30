@@ -57,15 +57,20 @@ public class FiringSolutionTests {
 		assertEquals(Math.PI/4, solution.getMyAngularDisplacement(), .00002);
 	}
 	
-	@Test public void ShouldCalculateShadowPercentageCorrectly() {
-//		new FiringSolution().setFiringPoint(pRobot)
-//					        .setVector(solution)
-//					        .setTime(firingLocation.getTime())
-//					        .setEnemyPoint(pWaveStart)
-//					        .setHitPoint(pHit)
-//					        .setHitTime(hit.getTime())
-//					        .setTimeUntilIntercept(timeToIntercept)
-//					        .setWaveVector(vWave);
+	@Test public void ShouldCalculateRoughShadowPercentage() {
+		FiringSolution solution = new FiringSolution().setPointToFireFrom(new Vector2D(100, 96))
+												        .setIntersectingBullet(new Vector2D(0,8))
+												        .setTimeUntilIntercept(1)
+												        .setEnemyPoint(new Vector2D(180,100))
+												        .setPointEnemyBulletHits(new Vector2D(100,100));
+												        //.setTimeToFire(0)
+												        //.setTimeEnemyBulletHits(0)
+												        //.setWaveVector(null);
+		//angle blocked = 5.724810452 degrees
+		//using bot 'size' of 44
+		//     Math.atan(22/distance)*2 = 30.7525025 degrees
+		double percent = solution.getShadowPercentage();
+		assertEquals(.18615, percent,.00001);
 	}
 	
 }
