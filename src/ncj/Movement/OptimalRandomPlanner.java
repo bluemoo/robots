@@ -33,28 +33,31 @@ public class OptimalRandomPlanner extends ThreeSixtyMovementPlanner {
 			percents.add(percent);
 		}
 		
+		return plans.get(selectWeightedIndex(percents, _random.next()));
+	}
+	
+	public int selectWeightedIndex(ArrayList<Double> weights, double randomValue)
+	{
 		double total = 0;
-		for(int i = 0 ; i < plans.size(); i++)
+		for(int i = 0 ; i < weights.size(); i++)
 		{
-			total += percents.get(i);
+			total += weights.get(i);
 		}
 
 		ArrayList<Double> thresholds = new ArrayList<Double>();
-		for(int i = 0 ; i < plans.size(); i++)
+		for(int i = 0 ; i < weights.size(); i++)
 		{
-			thresholds.add(percents.get(i)/total);
+			thresholds.add(weights.get(i)/total);
 		}
 		
 		double v = _random.next();
 		double threshold = 0;
-		for(int i = 0 ; i < plans.size(); i++)
+		for(int i = 0 ; i < thresholds.size(); i++)
 		{
 			threshold += thresholds.get(i);
 			if(v <= threshold)
-			return plans.get(i);	
+				return i;	
 		}
-		
-		return null;
+		return 0;
 	}
-
 }

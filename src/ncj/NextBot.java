@@ -124,6 +124,17 @@ public class NextBot extends AdvancedRobot {
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeHead.getX(), (int)pShadowEdgeHead.getY());
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeTail.getX(), (int)pShadowEdgeTail.getY());
 			
+			g.setColor(Color.BLUE);
+			elapsed = this.getTime() - wave.getTime();
+			Vector2D vShadowHeadBullet = pHeadIntercept.minus(pWaveStart).unit().times(wave.getVelocity());
+			Vector2D vShadowTailBullet = pTailIntercept.minus(pWaveStart).unit().times(wave.getVelocity());
+			Vector2D p1Head = pWaveStart.plus(vShadowHeadBullet.times(elapsed));
+			Vector2D p1Tail = p1Head.minus(vShadowHeadBullet);
+			Vector2D p2Head = pWaveStart.plus(vShadowTailBullet.times(elapsed));
+			Vector2D p2Tail = p2Head.minus(vShadowTailBullet);
+			g.drawLine((int)p1Head.getX(), (int)p1Head.getY(), (int)p1Tail.getX(), (int)p1Tail.getY());
+			g.drawLine((int)p2Head.getX(), (int)p2Head.getY(), (int)p2Tail.getX(), (int)p2Tail.getY());
+			
 			g.setColor(Color.WHITE);
 			Vector2D pHit = solution.getPointEnemyBulletHits();
 			g.drawRect((int)pHit.getX()-18, (int)pHit.getY() - 18, 35, 35);
