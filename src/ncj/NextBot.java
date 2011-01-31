@@ -7,6 +7,7 @@ import java.util.Date;
 import ncj.Movement.MovementPlanner;
 import ncj.Movement.PerpendicularMovementPlanner;
 import ncj.Movement.PlannedMovementController;
+import ncj.Movement.ThreeSixtyMovementPlanner;
 import ncj.Movement.WallSmoothing;
 
 import robocode.AdvancedRobot;
@@ -40,7 +41,7 @@ public class NextBot extends AdvancedRobot {
 		_enemy = new EnemyAnalysis(_log);
 		
 		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
-		_movementPlanner = new PerpendicularMovementPlanner(_enemy, _movementController);
+		_movementPlanner = new ThreeSixtyMovementPlanner(_enemy, _movementController);
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
 		while(true)
