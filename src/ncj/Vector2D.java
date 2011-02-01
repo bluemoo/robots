@@ -1,9 +1,11 @@
 package ncj;
 
+import robocode.util.Utils;
+
 public class Vector2D {
 
-	protected double _x;
-	protected double _y;
+	protected final double _x;
+	protected final double _y;
 
 	public Vector2D(double x, double y) {
 		_x = x;
@@ -51,5 +53,23 @@ public class Vector2D {
 		return robocode.util.Utils.normalRelativeAngle(Math.PI/2.0 - Math.atan2(_y, _x));
 	}
 	
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Vector2D) {
+        	Vector2D that = (Vector2D) other;
+            result = (Utils.isNear(this.getX(),that.getX()) && Utils.isNear(this.getY(), that.getY())
+                    && this.getClass().equals(that.getClass()));
+        }
+        return result;
+    }
+
+    @Override public int hashCode() {
+        return (int) (41 * (41 + getX()) + getY());
+    }
+    
+    public String toString()
+    {
+    	return "<" + _x + "," + _y + ">";
+    }
 
 }

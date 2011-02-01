@@ -57,15 +57,34 @@ public class FiringSolutionTests {
 		assertEquals(Math.PI/4, solution.getMyAngularDisplacement(), .00002);
 	}
 	
+	@Test public void ShouldCalculateShadowVectorsCorrectly()
+	{
+		FiringSolution solution = new FiringSolution().setPointToFireFrom(new Vector2D(7, 6))
+											        .setIntersectingBullet(new Vector2D(3,4))
+											        .setTimeBetweenFireAndIntercept(2.3)
+											        .setEnemyPoint(new Vector2D(30,10))
+											        .setTimeWaveStarted(3)
+											        .setTimeToFire(2)
+											        .setWaveVector(new Vector2D(10, 0));
+											        //.setPointEnemyBulletHits(new Vector2D(100,100));
+											        //.setTimeEnemyBulletHits(0)
+
+		assertEquals(1, solution.getShadowTopVector().magnitude(),.0001);
+		assertEquals(1, solution.getShadowBottomVector().magnitude(),.0001);
+		
+		assertEquals(new Vector2D(-.868243, .4961389), solution.getShadowTopVector());
+		assertEquals(new Vector2D(-.973417,.22903), solution.getShadowBottomVector());		
+	}
+	
 	@Test public void ShouldCalculateRoughShadowPercentage() {
 		FiringSolution solution = new FiringSolution().setPointToFireFrom(new Vector2D(100, 96))
 												        .setIntersectingBullet(new Vector2D(0,8))
 												        .setTimeBetweenFireAndIntercept(1)
 												        .setEnemyPoint(new Vector2D(180,100))
+												        .setTimeToFire(0)
+												        .setWaveVector(new Vector2D(1,0))
 												        .setPointEnemyBulletHits(new Vector2D(100,100));
-												        //.setTimeToFire(0)
 												        //.setTimeEnemyBulletHits(0)
-												        //.setWaveVector(null);
 		//angle blocked = 5.724810452 degrees
 		//using bot 'size' of 44
 		//     Math.atan(22/distance)*2 = 30.7525025 degrees

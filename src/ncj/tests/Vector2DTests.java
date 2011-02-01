@@ -51,4 +51,7 @@ public class Vector2DTests {
 		assertEquals(-2.677945044588987, new Vector2D(-1, -2).bearing(), .0001);
 	}
 
+	@Test public void ShouldUseValueForEquality() {
+		assertEquals(new Vector2D(1,2), new Vector2D(1,2));
+	}
 }

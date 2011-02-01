@@ -156,31 +156,44 @@ public class FiringSolution {
 		Vector2D pEnemy = getEnemyPoint();
 		double botToWaveDistance = getPointEnemyBulletHits().minus(pEnemy).magnitude();
 		double botAngularWidth = Math.atan(HALF_BOT_WIDTH/botToWaveDistance)*2;
-
-		Vector2D uEnemyToHead = getShadowTopVector();
-		Vector2D uEnemyToTail = getShadowBottomVector();
+		
+		Vector2D[] points = getShadow();
+		Vector2D uEnemyToHead = points[0];
+		Vector2D uEnemyToTail = points[1];
 		double shadowAngularWidth = Math.acos(uEnemyToHead.dot(uEnemyToTail));
 		
 		return shadowAngularWidth/botAngularWidth;
 		
 	}
+
+	public Vector2D[] getShadow()
+	{
+		double ticksBetweenFireAndIntersect = Math.ceil(getTimeBetweenFireAndIntercept());
+		double tickOfIntersection = getTimeToFire() + ticksBetweenFireAndIntersect;
+		
+		Vector2D v = getIntersectingBullet();
+		Vector2D pHead = getPointToFireFrom().plus(v.times(ticksBetweenFireAndIntersect));
+		Vector2D pTail = pHead.minus(v);
+
+		double waveSpeed = getWaveVector().magnitude();
+		double waveFlightTime = tickOfIntersection - getTimeWaveStarted();
+		double maxR = waveFlightTime*waveSpeed;
+		double minR = maxR - waveSpeed;
+
+		Vector2D pEnemy = getEnemyPoint();
+		
+		Vector2D[] points = Solver.findFrontAndBackPointsInRange(pTail, v, pEnemy, minR, maxR);		
+
+		return new Vector2D[] {points[0].minus(pEnemy).unit(), points[1].minus(pEnemy).unit()};
+	}
 	
 	public Vector2D getShadowTopVector()
 	{
-		Vector2D pEnemy = getEnemyPoint();
-		double elapsed = Math.ceil(getTimeBetweenFireAndIntercept());
-		Vector2D pHead = getPointToFireFrom().plus(getIntersectingBullet().times(elapsed));
-
-		return pHead.minus(pEnemy).unit();		
+		return getShadow()[1];		
 	}
 	
 	public Vector2D getShadowBottomVector()
 	{
-		Vector2D pEnemy = getEnemyPoint();
-		double elapsed = Math.ceil(getTimeBetweenFireAndIntercept());
-		Vector2D pHead = getPointToFireFrom().plus(getIntersectingBullet().times(elapsed));
-		Vector2D pTail = pHead.minus(getIntersectingBullet());
-
-		return pTail.minus(pEnemy).unit();
+		return getShadow()[0];		
 	}
 }
