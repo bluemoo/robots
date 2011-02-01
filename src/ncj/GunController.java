@@ -5,6 +5,7 @@ public class GunController {
 	private IGearbox _gearbox;
 	private TargetingComputer _targetingComputer;
 	private EnemyAnalysis _enemy;
+	private double _energyFired = 0;
 	
 	public GunController(IGearbox gearbox, EnemyAnalysis enemy, TargetingComputer targetingComputer) {
 		_gearbox = gearbox;
@@ -47,10 +48,9 @@ public class GunController {
 		if(latestSolution != null && latestSolution.getTimeToFire() == _gearbox.getTime()) {
 			if(_gearbox.getGunTurnRemainingRadians() == 0)
 			{
-				_gearbox.setFire(latestSolution.getPower());
-				
-				if(latestSolution.getPointEnemyBulletHits() != null)
-					System.out.println("Shadow %: " + latestSolution.getShadowPercentage());
+				double power = latestSolution.getPower();
+				_gearbox.setFire(power);
+				_energyFired += power;
 			}
 			else
 			{
@@ -65,5 +65,8 @@ public class GunController {
 		return _enemy.getLatestWave();
 	}
 
-
+	public double getEnergyFired()
+	{
+		return _energyFired;
+	}
 }

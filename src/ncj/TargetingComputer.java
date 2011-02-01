@@ -35,8 +35,7 @@ public class TargetingComputer {
 		return solve(wave, nextLocation);
 	}
 	
-	public FiringSolution solve(Wave wave,
-			IGearbox firingLocation) {
+	public FiringSolution solve(Wave wave, IGearbox firingLocation) {
 		long elapsed = firingLocation.getTime() - wave.getTime();
 		
 		IGearbox hit = hits_at(wave);
@@ -60,12 +59,13 @@ public class TargetingComputer {
 		double timeToIntercept = vRtoW.magnitude()/(RtoWSpeed - waveRtoWSpeed);
 		
 		return new FiringSolution().setPointToFireFrom(pRobot)
-		                           .setIntersectingBullet(solution)
 		                           .setTimeToFire(firingLocation.getTime())
+		                           .setTimeWaveStarted(wave.getTime())
+		                           .setTimeEnemyBulletHits(hit.getTime())
+		                           .setTimeBetweenFireAndIntercept(timeToIntercept)
+		                           .setIntersectingBullet(solution)
 		                           .setEnemyPoint(pWaveStart)
 		                           .setPointEnemyBulletHits(pHit)
-		                           .setTimeEnemyBulletHits(hit.getTime())
-		                           .setTimeUntilIntercept(timeToIntercept)
 		                           .setWaveVector(vWave);
 	}
 

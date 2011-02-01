@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class EnemyAnalysis {
 
+	public double damageTaken = 0;
+	
 	private EnemyState _lastState;
 	private EnemyState _currentState;
 	private double _dEnergy;
@@ -109,7 +111,7 @@ public class EnemyAnalysis {
 		}
 		return null;
 	}
-
+	
 	public void update_bullet_hit(double power) {
 		double newEnergy = _currentState.getEnergy() - robocode.Rules.getBulletDamage(power);
 		_currentState.setEnergy(newEnergy);

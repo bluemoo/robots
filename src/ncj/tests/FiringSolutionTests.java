@@ -17,7 +17,7 @@ public class FiringSolutionTests {
 	@Test public void ShouldCalculateCorrectInterceptPoint() {
 		FiringSolution solution = new FiringSolution().setIntersectingBullet(new Vector2D(10, 20))
 		                                              .setPointToFireFrom(new Vector2D(30, 40))
-		                                              .setTimeUntilIntercept(4.5);
+		                                              .setTimeBetweenFireAndIntercept(4.5);
 		Vector2D pIntercept = solution.getInterceptPoint();
 		assertEquals(75, pIntercept.getX(), .00001);
 		assertEquals(130, pIntercept.getY(), .00001);		
@@ -27,24 +27,24 @@ public class FiringSolutionTests {
 		
 		FiringSolution solution = new FiringSolution()
 									.setPointToFireFrom(new Vector2D(0, 0))
-									.setTimeUntilIntercept(10.4)
+									.setTimeBetweenFireAndIntercept(10.4)
 									.setIntersectingBullet(new Vector2D(15, 0))
 									.setWaveVector(new Vector2D(-15, 0));
 		
 		solution.adjust();
-		assertEquals(10.5, solution.getTimeUntilIntercept(), .00001);
+		assertEquals(10.5, solution.getTimeBetweenFireAndIntercept(), .00001);
 		assertEquals(14.71428, solution.getIntersectingBullet().getX(), .001);
 	}
 	
 	@Test public void ShouldAdjustBulletOneTickLater() {
 		FiringSolution solution = new FiringSolution()
 									.setPointToFireFrom(new Vector2D(0, 0))
-									.setTimeUntilIntercept(10.6)
+									.setTimeBetweenFireAndIntercept(10.6)
 									.setIntersectingBullet(new Vector2D(19.7, 0))
 									.setWaveVector(new Vector2D(-11, 0));
 		
 		solution.adjust();
-		assertEquals(11.5, solution.getTimeUntilIntercept(), .00001);
+		assertEquals(11.5, solution.getTimeBetweenFireAndIntercept(), .00001);
 		assertEquals(17.2973, solution.getIntersectingBullet().getX(), .0001);
 	}
 	
@@ -60,7 +60,7 @@ public class FiringSolutionTests {
 	@Test public void ShouldCalculateRoughShadowPercentage() {
 		FiringSolution solution = new FiringSolution().setPointToFireFrom(new Vector2D(100, 96))
 												        .setIntersectingBullet(new Vector2D(0,8))
-												        .setTimeUntilIntercept(1)
+												        .setTimeBetweenFireAndIntercept(1)
 												        .setEnemyPoint(new Vector2D(180,100))
 												        .setPointEnemyBulletHits(new Vector2D(100,100));
 												        //.setTimeToFire(0)
@@ -72,5 +72,6 @@ public class FiringSolutionTests {
 		double percent = solution.getShadowPercentage();
 		assertEquals(.18615, percent,.00001);
 	}
+	
 	
 }

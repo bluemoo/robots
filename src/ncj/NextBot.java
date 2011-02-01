@@ -14,6 +14,7 @@ import robocode.BattleEndedEvent;
 import robocode.BulletHitBulletEvent;
 import robocode.BulletHitEvent;
 import robocode.HitByBulletEvent;
+import robocode.RoundEndedEvent;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
 
@@ -25,6 +26,7 @@ public class NextBot extends AdvancedRobot {
 	Gearbox _gearbox;
 	GunController _gun;
 	private static LogFile _log;
+	private double _damageTaken = 0;
 	
 	public void run()
 	{
@@ -40,6 +42,7 @@ public class NextBot extends AdvancedRobot {
 		_enemy = new EnemyAnalysis(_log);
 		
 		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
+		//_movementPlanner = new PerpendicularMovementPlanner(_enemy, _movementController);
 		_movementPlanner = new OptimalRandomPlanner(_enemy, _movementController, new RandomNumber());
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
@@ -65,6 +68,7 @@ public class NextBot extends AdvancedRobot {
 
 	public void onHitByBullet(HitByBulletEvent e) {
 		_enemy.update_hit_by_bullet(e.getTime(), e.getBullet().getX(), e.getBullet().getY());
+		_damageTaken += robocode.Rules.getBulletDamage(e.getPower());
 	}
 
 	public void onBulletHitBullet(BulletHitBulletEvent e) {
@@ -115,12 +119,12 @@ public class NextBot extends AdvancedRobot {
 
 			g.setColor(Color.YELLOW);
 			
-			Vector2D pHeadIntercept = pFire.plus(vBullet.times(Math.ceil(solution.getTimeUntilIntercept())));
+			Vector2D pHeadIntercept = pFire.plus(vBullet.times(Math.ceil(solution.getTimeBetweenFireAndIntercept())));
 			Vector2D pTailIntercept = pHeadIntercept.minus(vBullet);
 			elapsed = solution.getTimeEnemyBulletHits()-wave.getTime();
 			Vector2D pWaveStart = new Vector2D(wave.getX(), wave.getY());
-			Vector2D pShadowEdgeHead = pWaveStart.plus(pHeadIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
-			Vector2D pShadowEdgeTail = pWaveStart.plus(pTailIntercept.minus(pWaveStart).unit().times(wave.getVelocity()*elapsed));
+			Vector2D pShadowEdgeHead = pWaveStart.plus(solution.getShadowTopVector().times(wave.getVelocity()*elapsed));
+			Vector2D pShadowEdgeTail = pWaveStart.plus(solution.getShadowBottomVector().times(wave.getVelocity()*elapsed));
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeHead.getX(), (int)pShadowEdgeHead.getY());
 			g.drawLine((int)wave.getX(), (int)wave.getY(), (int)pShadowEdgeTail.getX(), (int)pShadowEdgeTail.getY());
 			
@@ -144,6 +148,12 @@ public class NextBot extends AdvancedRobot {
 		for(IGearbox gearbox : _movementController.predict_future_position()) {
 			g.drawRect((int)gearbox.getX()-2, (int)gearbox.getY() - 2, 5, 5);
 		}
+	}
+		
+	@Override
+	public void onRoundEnded(RoundEndedEvent event) {
+		System.out.println("Damage Taken: " + _damageTaken);
+		System.out.println("Energy Fired: " + _gun.getEnergyFired());
 	}
 	
 	public void onBattleEnded(BattleEndedEvent e) {
