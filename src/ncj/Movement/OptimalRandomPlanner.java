@@ -8,7 +8,7 @@ import ncj.FiringSolution;
 import ncj.TargetingComputer;
 import ncj.Wave;
 
-public class OptimalRandomPlanner extends ThreeSixtyMovementPlanner {
+public class OptimalRandomPlanner extends StraightLinePlanner {
 
 	IRandomNumber _random;
 	

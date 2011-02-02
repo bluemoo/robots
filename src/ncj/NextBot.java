@@ -7,6 +7,7 @@ import java.util.Date;
 import ncj.Movement.MovementPlanner;
 import ncj.Movement.OptimalRandomPlanner;
 import ncj.Movement.PlannedMovementController;
+import ncj.Movement.StraightLinePlanner;
 import ncj.Movement.ThreeSixtyMovementPlanner;
 import ncj.Movement.WallSmoothing;
 
@@ -26,14 +27,15 @@ public class NextBot extends AdvancedRobot {
 	EnemyAnalysis _enemy;
 	Gearbox _gearbox;
 	GunController _gun;
-	private static LogFile _log;
+	private static ILogFile _log;
 	private double _damageTaken = 0;
 	
 	public void run()
 	{
 		System.out.println(this.getDataDirectory());
 		if( _log == null)
-			_log = new LogFile(this.getDataFile("enemy_history" + new Date().getTime() + ".txt"));
+			_log = new FakeLogFile();
+		//_log = new LogFile(this.getDataFile("enemy_history" + new Date().getTime() + ".txt"));
 		
 		setAdjustGunForRobotTurn(true);
 		setAdjustRadarForGunTurn(true);
@@ -45,7 +47,9 @@ public class NextBot extends AdvancedRobot {
 		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
 		//_movementPlanner = new PerpendicularMovementPlanner(_enemy, _movementController);
 		//_movementPlanner = new ThreeSixtyMovementPlanner(_enemy, _movementController);
+		//_movementPlanner = new StraightLinePlanner(_enemy, _movementController);
 		_movementPlanner = new OptimalRandomPlanner(_enemy, _movementController, new RandomNumber());
+		
 		_gun = new GunController(_gearbox, _enemy, new TargetingComputer(_movementController));
 		
 		while(true)
@@ -142,7 +146,7 @@ public class NextBot extends AdvancedRobot {
 			g.drawLine((int)p2Head.getX(), (int)p2Head.getY(), (int)p2Tail.getX(), (int)p2Tail.getY());
 			
 			g.setColor(Color.WHITE);
-			Vector2D pHit = solution.getPointEnemyBulletHits();
+			Vector2D pHit = solution.getPointEnemyBulletHits(); 
 			g.drawRect((int)pHit.getX()-18, (int)pHit.getY() - 18, 35, 35);
 		}
 		
