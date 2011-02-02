@@ -84,7 +84,7 @@ public abstract class MovementPlanner {
 	}
 
 	protected PlannedMovementController buildControllerToTest(MovementPlan plan) {
-		PlannedMovementController copiedPlans = new PlannedMovementController(_movementController.getLastPlannedState());
+		PlannedMovementController copiedPlans = new PlannedMovementController(_movementController.getCurrentGearbox());
 		copiedPlans.Copy(_movementController);
 		copiedPlans.setMovement(plan);
 		return copiedPlans;

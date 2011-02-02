@@ -23,6 +23,25 @@ For E(interception strategy) > 0,
 										
 Experimental data
 --------------
+== StraightLinePlanner before fixing the aiming:
+P(bullet aimed incorrectly) = 70%
+
+== Random - StraightLinePlanner:
+P(interception | bullet aimed at my position) = 50%
+P(bullet aimed incorrectly) = 68%
+P(enemy shot will miss me) = 84%
+
+== Random - ThreeSixtyPlanner:
+P(interception | bullet aimed at my position) = 57%
+P(bullet aimed incorrectly) = 63%
+P(enemy shot will miss me) = 84%
+
+== Random - StraightLinePlanner v2
+P(interception | bullet aimed at my position) = 62%
+P(bullet aimed incorrectly) = 64%
+P(enemy shot will miss me) = 86%
+
+
 == With no adjustment for accuracy (250 battles with Y):
 P(interception | bullet aimed at my position) = 62%
 P(bullet aimed incorrectly) = 21%

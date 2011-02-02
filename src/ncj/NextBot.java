@@ -2,10 +2,12 @@ package ncj;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Date;
 
 import ncj.Movement.MovementPlanner;
 import ncj.Movement.OptimalRandomPlanner;
 import ncj.Movement.PlannedMovementController;
+import ncj.Movement.StraightLinePlanner;
 import ncj.Movement.WallSmoothing;
 
 import robocode.AdvancedRobot;
@@ -31,8 +33,8 @@ public class NextBot extends AdvancedRobot {
 	{
 		System.out.println(this.getDataDirectory());
 		if( _log == null)
-			_log = new FakeLogFile();
-		//_log = new LogFile(this.getDataFile("enemy_history" + new Date().getTime() + ".txt"));
+			_log = new LogFile(this.getDataFile("enemy_history" + new Date().getTime() + ".txt"));
+		//_log = new FakeLogFile();
 		
 		setAdjustGunForRobotTurn(true);
 		setAdjustRadarForGunTurn(true);
