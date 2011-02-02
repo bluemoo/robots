@@ -2,13 +2,10 @@ package ncj;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Date;
 
 import ncj.Movement.MovementPlanner;
 import ncj.Movement.OptimalRandomPlanner;
 import ncj.Movement.PlannedMovementController;
-import ncj.Movement.StraightLinePlanner;
-import ncj.Movement.ThreeSixtyMovementPlanner;
 import ncj.Movement.WallSmoothing;
 
 import robocode.AdvancedRobot;
@@ -25,7 +22,7 @@ public class NextBot extends AdvancedRobot {
 	PlannedMovementController _movementController;
 	MovementPlanner _movementPlanner;
 	EnemyAnalysis _enemy;
-	Gearbox _gearbox;
+	CachedGearbox _gearbox;
 	GunController _gun;
 	private static ILogFile _log;
 	private double _damageTaken = 0;
@@ -41,7 +38,7 @@ public class NextBot extends AdvancedRobot {
 		setAdjustRadarForGunTurn(true);
 		setTurnRadarLeftRadians(Double.POSITIVE_INFINITY);
 
-		_gearbox = new Gearbox(this);
+		_gearbox = new CachedGearbox(new Gearbox(this));
 		_enemy = new EnemyAnalysis(_log);
 		
 		_movementController = new PlannedMovementController(_gearbox,  new WallSmoothing());
@@ -60,7 +57,7 @@ public class NextBot extends AdvancedRobot {
 	}
 	
 	public void onScannedRobot(ScannedRobotEvent e) {
-
+		_gearbox.update();
 		adjustRadar(e);
 		_enemy.update(new EnemyState(e, _gearbox));
 		_movementPlanner.plan();
