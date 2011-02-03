@@ -3,9 +3,9 @@ package ncj.Movement;
 import java.util.ArrayList;
 
 import ncj.EnemyAnalysis;
-import ncj.SimulatedGearbox;
+import ncj.IGearbox;
+import ncj.Vector2D;
 import ncj.Wave;
-import ncj.Movement.PlannedMovementController.WaveHitResult;
 
 public class StraightLinePlanner extends ThreeSixtyMovementPlanner {
 
@@ -17,41 +17,45 @@ public class StraightLinePlanner extends ThreeSixtyMovementPlanner {
 	@Override
 	public ArrayList<MovementPlan> calculatePlansToTry(Wave wave) {
 		ArrayList<MovementPlan> plans = new ArrayList<MovementPlan>();
+		double rot1 = calculateRotation1(wave, _movementController.getCurrentGearbox());
+		double rot2 = calculateRotation2(wave, _movementController.getCurrentGearbox());
 		
-		double lastDistance = 2000;
-		double distanceAtHit = 0;
-		MovementPlan plan = new MovementPlan().setTurn(0).setAhead(lastDistance);
-		PlannedMovementController controller = buildControllerToTest(plan);
-		for( SimulatedGearbox simulation: controller.predict_future_position())
+		for(double d = 0; d<=600; d+=3)
 		{
-			distanceAtHit = simulation.getDistanceRemaining();
-			if( wave.hasHit(simulation))
-				break;
-		}
-		double span = lastDistance - distanceAtHit;
-		for(double d = 0; d <= span; d++)
-		{
-			plans.add(new MovementPlan().setTurn(0).setAhead(d));
-		}
-
-		lastDistance = -2000;
-		distanceAtHit = 0;
-		plan = new MovementPlan().setTurn(0).setAhead(lastDistance);
-		controller = buildControllerToTest(plan);
-		for( SimulatedGearbox simulation: controller.predict_future_position())
-		{
-			distanceAtHit = simulation.getDistanceRemaining();
-			if( wave.hasHit(simulation))
-				break;
-		}
-		span = lastDistance - distanceAtHit;
-		for(double d = 0; d >= span; d--)
-		{
-			plans.add(new MovementPlan().setTurn(0).setAhead(d));
+			plans.add(new MovementPlan().setTurn(rot1).setAhead(d));
 		}
 		
-
+		for(double d = 0; d>=-600; d-=3)
+		{
+			plans.add(new MovementPlan().setTurn(rot2).setAhead(d));
+		}
+		
 		return plans;
+	}
+	
+	private double calculateRotation1(Wave wave, IGearbox gearbox) {
+		Vector2D pRobot = new Vector2D(gearbox.getX(), gearbox.getY());
+		Vector2D pWave = new Vector2D(wave.getX(), wave.getY());
+		Vector2D vWtoR = pRobot.minus(pWave);
+		Vector2D vDesired = vWtoR.calculatePerpendicular();
+		double bearing = Math.PI/2 - Math.atan2(vDesired.getY(), vDesired.getX());
+		double rotation = robocode.util.Utils.normalRelativeAngle(bearing - gearbox.getHeadingRadians());
+		
+		if( Math.abs(rotation) > Math.PI/2)
+			rotation = robocode.util.Utils.normalRelativeAngle(rotation + Math.PI);
+		return rotation;
+	}
+	private double calculateRotation2(Wave wave, IGearbox gearbox) {
+		Vector2D pRobot = new Vector2D(gearbox.getX(), gearbox.getY());
+		Vector2D pWave = new Vector2D(wave.getX(), wave.getY());
+		Vector2D vWtoR = pRobot.minus(pWave);
+		Vector2D vDesired = vWtoR.calculatePerpendicular();
+		double bearing = Math.PI/2 - Math.atan2(vDesired.getY(), vDesired.getX()) + Math.PI;
+		double rotation = robocode.util.Utils.normalRelativeAngle(bearing - gearbox.getHeadingRadians());
+		
+		if( Math.abs(rotation) > Math.PI/2)
+			rotation = robocode.util.Utils.normalRelativeAngle(rotation + Math.PI);
+		return rotation;
 	}
 
 }

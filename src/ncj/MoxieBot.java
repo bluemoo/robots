@@ -19,7 +19,7 @@ import robocode.RoundEndedEvent;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
 
-public class NextBot extends AdvancedRobot {
+public class MoxieBot extends AdvancedRobot {
 
 	PlannedMovementController _movementController;
 	MovementPlanner _movementPlanner;
