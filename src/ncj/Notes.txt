@@ -1,3 +1,4 @@
+Current Version: MoxieBot1.0
 
 Project several possible paths, and choose one.   
 
