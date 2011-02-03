@@ -1,3 +1,7 @@
+//The canonical repository for this bot is:
+//git://github.com/bluemoo/robots.git
+//
+//The license file can be found there as well.
 package ncj;
 
 import java.awt.Color;
